@@ -18,6 +18,6 @@
         /// <summary>
         /// заочная
         /// </summary>
-        Correspondence = 2
+        CorrespondenceEducation = 2
     }
 }

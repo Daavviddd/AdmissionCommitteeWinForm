@@ -1,6 +1,5 @@
 using AdmissionCommittee.Forms;
 using AdmissionCommittee.Models;
-using System.Drawing;
 
 namespace AdmissionCommittee
 {
@@ -8,9 +7,11 @@ namespace AdmissionCommittee
     {
         public readonly List<StudentModel> items;
         public readonly BindingSource bindingSource = new();
+
         public MainForm()
         {
             float math, russian, computer;
+
             items = new List<StudentModel>();
             items.Add(new StudentModel()
             {
@@ -48,14 +49,12 @@ namespace AdmissionCommittee
 
         private void StudentDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
-            if (e.RowIndex >= StudentDataGridView.Rows.Count) return;
-
-            var row = StudentDataGridView.Rows[e.RowIndex];
-            if (row.DataBoundItem == null) return;
-
             var col = StudentDataGridView.Columns[e.ColumnIndex];
-            var student = (StudentModel)row.DataBoundItem;
+
+            if (!(StudentDataGridView.Rows[e.RowIndex].DataBoundItem is StudentModel student))
+            {
+                return;
+            }
 
             if (col.DataPropertyName == nameof(StudentModel.Gender))
             {
@@ -83,7 +82,7 @@ namespace AdmissionCommittee
                     case EducationalForm.FullTimeAndPartTime:
                         e.Value = "Очно-заочная";
                         break;
-                    case EducationalForm.Correspondence:
+                    case EducationalForm.CorrespondenceEducation:
                         e.Value = "Заочная";
                         break;
                 }
@@ -94,11 +93,14 @@ namespace AdmissionCommittee
 
         private void StudentDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
-            if (e.RowIndex >= StudentDataGridView.Rows.Count) return;
+            var totalPoints = 300;
+            var padding = 2;
+            var progressBarHeightReduction = 4;
 
-            var row = StudentDataGridView.Rows[e.RowIndex];
-            if (row.DataBoundItem == null) return;
+            if (e.ColumnIndex < 0 || e.RowIndex < 0)
+            {
+                return;
+            }
 
             var col = StudentDataGridView.Columns[e.ColumnIndex];
             var colName = col.Name;
@@ -109,25 +111,30 @@ namespace AdmissionCommittee
                 return;
             }
 
-            var student = (StudentModel)row.DataBoundItem;
+            if (!(StudentDataGridView.Rows[e.RowIndex].DataBoundItem is StudentModel student))
+            {
+                e.Handled = false;
+                return;
+            }
             var graphics = e.Graphics;
             var rect = e.CellBounds;
-            var totalPoints = 300;
-            var padding = 2;
-            var progressBarHeightReduction = 4;
+
+            e.PaintBackground(rect, true);
+
             var width = rect.Width * (student.TotalAmountOfPoints / totalPoints);
             var targetRect = new Rectangle(rect.Left + padding, rect.Top + padding, (int)width, rect.Height - progressBarHeightReduction);
-
-            e.PaintBackground(e.CellBounds, true);
 
             graphics?.FillRectangle(Brushes.Bisque, targetRect);
             graphics?.DrawRectangle(Pens.Gold, targetRect);
 
             var format = new StringFormat();
+
             format.LineAlignment = StringAlignment.Center;
             format.Alignment = StringAlignment.Center;
 
-            graphics?.DrawString(student.TotalAmountOfPoints.ToString(), this.Font, Brushes.Black, rect, format);
+            var rectF = new RectangleF(rect.X, rect.Y, rect.Width, rect.Height);
+
+            graphics?.DrawString(e.Value?.ToString(), DefaultFont, Brushes.Black, rectF, format);
             e.Handled = true;
         }
 
@@ -149,7 +156,7 @@ namespace AdmissionCommittee
             }
 
             var student = (StudentModel)StudentDataGridView.SelectedRows[0].DataBoundItem;
-            var applicants = new ApplicantsForm();
+            var applicants = new ApplicantsForm(student);
 
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
@@ -171,7 +178,7 @@ namespace AdmissionCommittee
         }
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            if(StudentDataGridView.SelectedRows.Count == 0)
+            if (StudentDataGridView.SelectedRows.Count == 0)
             {
                 return;
             }
@@ -179,12 +186,12 @@ namespace AdmissionCommittee
             var student = (StudentModel)StudentDataGridView.SelectedRows[0].DataBoundItem;
             var target = items.FirstOrDefault(x => x.id == student.id);
 
-            if (target != null && 
+            if (target != null &&
                 MessageBox.Show($"Вы действительно желаете удалить '{target.FullName}' ?",
                 "Удаление студента",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question)==DialogResult.Yes) 
-            { 
+                MessageBoxIcon.Question) == DialogResult.Yes)
+            {
                 items.Remove(target);
                 bindingSource.ResetBindings(false);
                 SetStatistic();

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            textBox1 = new TextBox();
+            FullNameTextBox = new TextBox();
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
@@ -37,16 +37,18 @@
             label6 = new Label();
             label7 = new Label();
             label8 = new Label();
-            comboBox1 = new ComboBox();
-            dateTimePicker1 = new DateTimePicker();
-            comboBox2 = new ComboBox();
-            numericUpDown1 = new NumericUpDown();
-            numericUpDown2 = new NumericUpDown();
-            numericUpDown3 = new NumericUpDown();
-            textBox2 = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
+            GenderComboBox = new ComboBox();
+            BirthdayDateTimePicker = new DateTimePicker();
+            EducationFormComboBox = new ComboBox();
+            MathNumericUpDown = new NumericUpDown();
+            RussianNumericUpDown = new NumericUpDown();
+            ComputerNumericUpDown = new NumericUpDown();
+            TotalPointsTextBox = new TextBox();
+            btnSave = new Button();
+            btnClose = new Button();
+            ((System.ComponentModel.ISupportInitialize)MathNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RussianNumericUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ComputerNumericUpDown).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -58,12 +60,13 @@
             label1.TabIndex = 0;
             label1.Text = "ФИО:";
             // 
-            // textBox1
+            // FullNameTextBox
             // 
-            textBox1.Location = new Point(245, 32);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(376, 27);
-            textBox1.TabIndex = 1;
+            FullNameTextBox.Location = new Point(245, 32);
+            FullNameTextBox.Name = "FullNameTextBox";
+            FullNameTextBox.Size = new Size(376, 27);
+            FullNameTextBox.TabIndex = 1;
+            FullNameTextBox.KeyPress += FullNameTextBox_KeyPress;
             // 
             // label2
             // 
@@ -128,71 +131,96 @@
             label8.TabIndex = 8;
             label8.Text = "Общее кол-во баллов";
             // 
-            // comboBox1
+            // GenderComboBox
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(245, 84);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(376, 28);
-            comboBox1.TabIndex = 9;
+            GenderComboBox.FormattingEnabled = true;
+            GenderComboBox.Location = new Point(245, 84);
+            GenderComboBox.Name = "GenderComboBox";
+            GenderComboBox.Size = new Size(376, 28);
+            GenderComboBox.TabIndex = 9;
+            GenderComboBox.DrawItem += GenderComboBox_DrawItem;
+            GenderComboBox.SelectedIndexChanged += GenderComboBox_SelectedIndexChanged;
             // 
-            // dateTimePicker1
+            // BirthdayDateTimePicker
             // 
-            dateTimePicker1.Location = new Point(245, 139);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(376, 27);
-            dateTimePicker1.TabIndex = 10;
-            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
+            BirthdayDateTimePicker.Location = new Point(245, 139);
+            BirthdayDateTimePicker.Name = "BirthdayDateTimePicker";
+            BirthdayDateTimePicker.Size = new Size(376, 27);
+            BirthdayDateTimePicker.TabIndex = 10;
+            BirthdayDateTimePicker.ValueChanged += BirthdayDateTimePicker_ValueChanged;
             // 
-            // comboBox2
+            // EducationFormComboBox
             // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(245, 189);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(376, 28);
-            comboBox2.TabIndex = 11;
+            EducationFormComboBox.FormattingEnabled = true;
+            EducationFormComboBox.Location = new Point(245, 189);
+            EducationFormComboBox.Name = "EducationFormComboBox";
+            EducationFormComboBox.Size = new Size(376, 28);
+            EducationFormComboBox.TabIndex = 11;
+            EducationFormComboBox.DrawItem += EducationFormComboBox_DrawItem;
             // 
-            // numericUpDown1
+            // MathNumericUpDown
             // 
-            numericUpDown1.Location = new Point(245, 243);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(376, 27);
-            numericUpDown1.TabIndex = 12;
+            MathNumericUpDown.Location = new Point(245, 243);
+            MathNumericUpDown.Name = "MathNumericUpDown";
+            MathNumericUpDown.Size = new Size(376, 27);
+            MathNumericUpDown.TabIndex = 12;
             // 
-            // numericUpDown2
+            // RussianNumericUpDown
             // 
-            numericUpDown2.Location = new Point(245, 287);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(376, 27);
-            numericUpDown2.TabIndex = 13;
+            RussianNumericUpDown.Location = new Point(245, 287);
+            RussianNumericUpDown.Name = "RussianNumericUpDown";
+            RussianNumericUpDown.Size = new Size(376, 27);
+            RussianNumericUpDown.TabIndex = 13;
             // 
-            // numericUpDown3
+            // ComputerNumericUpDown
             // 
-            numericUpDown3.Location = new Point(245, 335);
-            numericUpDown3.Name = "numericUpDown3";
-            numericUpDown3.Size = new Size(376, 27);
-            numericUpDown3.TabIndex = 14;
+            ComputerNumericUpDown.Location = new Point(245, 335);
+            ComputerNumericUpDown.Name = "ComputerNumericUpDown";
+            ComputerNumericUpDown.Size = new Size(376, 27);
+            ComputerNumericUpDown.TabIndex = 14;
             // 
-            // textBox2
+            // TotalPointsTextBox
             // 
-            textBox2.Location = new Point(245, 390);
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(376, 27);
-            textBox2.TabIndex = 15;
+            TotalPointsTextBox.Location = new Point(245, 390);
+            TotalPointsTextBox.Name = "TotalPointsTextBox";
+            TotalPointsTextBox.ReadOnly = true;
+            TotalPointsTextBox.Size = new Size(376, 27);
+            TotalPointsTextBox.TabIndex = 15;
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(142, 505);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(140, 29);
+            btnSave.TabIndex = 16;
+            btnSave.Text = "Сохранить";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+            // 
+            // btnClose
+            // 
+            btnClose.Location = new Point(288, 505);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(140, 29);
+            btnClose.TabIndex = 17;
+            btnClose.Text = "Отмена";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // ApplicantsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(633, 559);
-            Controls.Add(textBox2);
-            Controls.Add(numericUpDown3);
-            Controls.Add(numericUpDown2);
-            Controls.Add(numericUpDown1);
-            Controls.Add(comboBox2);
-            Controls.Add(dateTimePicker1);
-            Controls.Add(comboBox1);
+            Controls.Add(btnClose);
+            Controls.Add(btnSave);
+            Controls.Add(TotalPointsTextBox);
+            Controls.Add(ComputerNumericUpDown);
+            Controls.Add(RussianNumericUpDown);
+            Controls.Add(MathNumericUpDown);
+            Controls.Add(EducationFormComboBox);
+            Controls.Add(BirthdayDateTimePicker);
+            Controls.Add(GenderComboBox);
             Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label6);
@@ -200,15 +228,15 @@
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
-            Controls.Add(textBox1);
+            Controls.Add(FullNameTextBox);
             Controls.Add(label1);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "ApplicantsForm";
             Text = "ApplicantsForm";
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)MathNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RussianNumericUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ComputerNumericUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -216,7 +244,7 @@
         #endregion
 
         private Label label1;
-        private TextBox textBox1;
+        private TextBox FullNameTextBox;
         private Label label2;
         private Label label3;
         private Label label4;
@@ -224,12 +252,14 @@
         private Label label6;
         private Label label7;
         private Label label8;
-        private ComboBox comboBox1;
-        private DateTimePicker dateTimePicker1;
-        private ComboBox comboBox2;
-        private NumericUpDown numericUpDown1;
-        private NumericUpDown numericUpDown2;
-        private NumericUpDown numericUpDown3;
-        private TextBox textBox2;
+        private ComboBox GenderComboBox;
+        private DateTimePicker BirthdayDateTimePicker;
+        private ComboBox EducationFormComboBox;
+        private NumericUpDown MathNumericUpDown;
+        private NumericUpDown RussianNumericUpDown;
+        private NumericUpDown ComputerNumericUpDown;
+        private TextBox TotalPointsTextBox;
+        private Button btnSave;
+        private Button btnClose;
     }
 }
