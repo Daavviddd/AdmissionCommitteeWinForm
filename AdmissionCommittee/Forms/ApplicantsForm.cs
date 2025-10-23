@@ -1,14 +1,18 @@
-﻿using AdmissionCommittee.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
-using System.Windows.Forms;
+﻿using System.ComponentModel.DataAnnotations;
+using AdmissionCommittee.Infrostructure;
+using AdmissionCommittee.Models;
 
 namespace AdmissionCommittee.Forms
 {
     public partial class ApplicantsForm : Form
     {
         private readonly StudentModel targetStudent;
+
         private readonly ErrorProvider errorProvider = new ErrorProvider();
+
+        /// <summary>
+        /// Конструктор добавления и редактирования студента
+        /// </summary>
         public ApplicantsForm(StudentModel? sourceStudent = null)
         {
             InitializeComponent();
@@ -46,11 +50,17 @@ namespace AdmissionCommittee.Forms
                     TotalAmountOfPoints = 0,
                 };
             }
+            GenderComboBox.DrawMode = DrawMode.OwnerDrawFixed;
+            EducationFormComboBox.DrawMode = DrawMode.OwnerDrawFixed;
+
             GenderComboBox.DataSource = Enum.GetValues(typeof(Gender));
             EducationFormComboBox.DataSource = Enum.GetValues(typeof(EducationalForm));
 
-            GenderComboBox.AddBinding(x => x.SelectedItem, targetStudent, x => x.Gender, errorProvider);
-            EducationFormComboBox.AddBinding(x => x.SelectedItem, targetStudent, x => x.EducationalForm, errorProvider);
+            if (sourceStudent != null)
+            {
+                GenderComboBox.SelectedItem = sourceStudent.Gender;
+                EducationFormComboBox.SelectedItem = sourceStudent.EducationalForm;
+            }
 
             var dateTimePickerBinding = new Binding("Value", targetStudent, "Birthday");
             dateTimePickerBinding.Format += new ConvertEventHandler(DateOnlyToDateTime!);
@@ -58,14 +68,16 @@ namespace AdmissionCommittee.Forms
             BirthdayDateTimePicker.DataBindings.Add(dateTimePickerBinding);
 
             FullNameTextBox.AddBinding(x => x.Text, targetStudent, x => x.FullName, errorProvider);
+            GenderComboBox.AddBinding(x => x.SelectedValue!, targetStudent, x => x.Gender, errorProvider);
+            EducationFormComboBox.AddBinding(x => x.SelectedValue!, targetStudent, x => x.EducationalForm, errorProvider);
             MathNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.MathScores, errorProvider);
             RussianNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.PointsInRussianLanguage, errorProvider);
             ComputerNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.ComputerScienceScores, errorProvider);
             TotalPointsTextBox.AddBinding(x => x.Text, targetStudent, x => x.TotalAmountOfPoints, errorProvider);
 
-            MathNumericUpDown.ValueChanged += NumericUpDown_ValueChanged;
-            RussianNumericUpDown.ValueChanged += NumericUpDown_ValueChanged;
-            ComputerNumericUpDown.ValueChanged += NumericUpDown_ValueChanged;
+            MathNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
+            RussianNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
+            ComputerNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
 
             UpdateTotalPoints();
 
@@ -77,6 +89,7 @@ namespace AdmissionCommittee.Forms
             if (e.DesiredType == typeof(DateTime) && e.Value is DateOnly)
             {
                 var dateOnly = (DateOnly)e.Value;
+
                 e.Value = new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day);
             }
         }
@@ -111,10 +124,12 @@ namespace AdmissionCommittee.Forms
             {
                 e.DrawBackground();
                 e.DrawFocusRectangle();
+
                 var value = GenderComboBox.Items[e.Index];
+
                 if (value is Gender genderValue)
                 {
-                    var valueString = genderValue.ToString();
+                    var valueString = string.Empty;
                     switch (genderValue)
                     {
                         case Gender.Male:
@@ -123,11 +138,11 @@ namespace AdmissionCommittee.Forms
                         case Gender.Female:
                             valueString = "Женский";
                             break;
-                        case Gender.Unknow:
+                        default:
                             valueString = "-";
                             break;
                     }
-                    var brush = SystemBrushes.Control;
+                    var brush = SystemBrushes.ControlText;
                     if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                     {
                         brush = SystemBrushes.HighlightText;
@@ -143,10 +158,13 @@ namespace AdmissionCommittee.Forms
             {
                 e.DrawBackground();
                 e.DrawFocusRectangle();
+
                 var value = EducationFormComboBox.Items[e.Index];
+
                 if (value is EducationalForm educationFormValue)
                 {
                     var valueString = educationFormValue.ToString();
+
                     switch (educationFormValue)
                     {
                         case EducationalForm.FullTime:
@@ -159,11 +177,14 @@ namespace AdmissionCommittee.Forms
                             valueString = "Заочная";
                             break;
                     }
+
                     var brush = SystemBrushes.Control;
+
                     if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                     {
                         brush = SystemBrushes.HighlightText;
                     }
+
                     e.Graphics.DrawString(valueString, e.Font!, Brushes.Black, new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height));
                 }
             }
@@ -171,9 +192,17 @@ namespace AdmissionCommittee.Forms
 
         private void GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (GenderComboBox.SelectedIndex > 0)
+            if (GenderComboBox.SelectedIndex >= 0)
             {
-                targetStudent.Gender = (Gender)GenderComboBox.SelectedItem;
+                targetStudent.Gender = (Gender)GenderComboBox.SelectedItem!;
+            }
+        }
+
+        private void EducationFormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (EducationFormComboBox.SelectedIndex >= 0)
+            {
+                targetStudent.EducationalForm = (EducationalForm)EducationFormComboBox.SelectedItem!;
             }
         }
 
@@ -256,6 +285,7 @@ namespace AdmissionCommittee.Forms
         private void btnClose_Click(object sender, EventArgs e)
         {
             var resultClose = MessageBox.Show("Вы точно хотите отменить операцию ?", "Отмена", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (resultClose == DialogResult.Yes)
             {
                 DialogResult = DialogResult.Cancel;
@@ -264,6 +294,9 @@ namespace AdmissionCommittee.Forms
 
         }
 
+        /// <summary>
+        /// Текущий абитуриент 
+        /// </summary>
         public StudentModel CurrentStudent => targetStudent;
     }
 }

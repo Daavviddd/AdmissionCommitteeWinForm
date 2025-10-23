@@ -5,12 +5,24 @@ namespace AdmissionCommittee
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
+        /// <summary>
+        /// Список студентов
+        /// </summary>
         public readonly List<StudentModel> items;
+
+        /// <summary>
+        /// Источник данных для DataGridView
+        /// </summary>
         public readonly BindingSource bindingSource = new();
 
+        /// <summary>
+        /// Конструктор главной формы
+        /// </summary>
         public MainForm()
         {
-            float math, russian, computer;
+            var math = 0f;
+            var russian = 0f;
+            var computer = 0f;
 
             items = new List<StudentModel>();
             items.Add(new StudentModel()
@@ -116,6 +128,7 @@ namespace AdmissionCommittee
                 e.Handled = false;
                 return;
             }
+
             var graphics = e.Graphics;
             var rect = e.CellBounds;
 
@@ -141,13 +154,16 @@ namespace AdmissionCommittee
         private void AddButton_Click(object sender, EventArgs e)
         {
             var applicants = new ApplicantsForm();
+
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
                 items.Add(applicants.CurrentStudent);
                 bindingSource.ResetBindings(false);
+
                 SetStatistic();
             }
         }
+
         private void EditButton_Click(object sender, EventArgs e)
         {
             if (StudentDataGridView.SelectedRows.Count == 0)
@@ -161,6 +177,7 @@ namespace AdmissionCommittee
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
                 var target = items.FirstOrDefault(x => x.id == applicants.CurrentStudent.id);
+
                 if (target != null)
                 {
                     target.FullName = applicants.CurrentStudent.FullName;
@@ -176,6 +193,7 @@ namespace AdmissionCommittee
                 }
             }
         }
+
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             if (StudentDataGridView.SelectedRows.Count == 0)
@@ -187,16 +205,15 @@ namespace AdmissionCommittee
             var target = items.FirstOrDefault(x => x.id == student.id);
 
             if (target != null &&
-                MessageBox.Show($"Вы действительно желаете удалить '{target.FullName}' ?",
-                "Удаление студента",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question) == DialogResult.Yes)
+                MessageBox.Show($"Вы действительно желаете удалить '{target.FullName}' ?", "Удаление студента", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 items.Remove(target);
                 bindingSource.ResetBindings(false);
+
                 SetStatistic();
             }
         }
+
         private void SetStatistic()
         {
             NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {items.Count}";

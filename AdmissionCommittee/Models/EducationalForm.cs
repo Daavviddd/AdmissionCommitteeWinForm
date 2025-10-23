@@ -6,17 +6,17 @@
     public enum EducationalForm : byte
     {
         /// <summary>
-        /// очная
+        /// Очная
         /// </summary>
         FullTime = 0,
 
         /// <summary>
-        /// очно-заочная
+        /// Очно-заочная
         /// </summary>
         FullTimeAndPartTime = 1,
 
         /// <summary>
-        /// заочная
+        /// Заочная
         /// </summary>
         CorrespondenceEducation = 2
     }

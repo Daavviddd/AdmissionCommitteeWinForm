@@ -157,6 +157,7 @@
             EducationFormComboBox.Size = new Size(376, 28);
             EducationFormComboBox.TabIndex = 11;
             EducationFormComboBox.DrawItem += EducationFormComboBox_DrawItem;
+            EducationFormComboBox.SelectedIndexChanged += EducationFormComboBox_SelectedIndexChanged;
             // 
             // MathNumericUpDown
             // 
@@ -211,7 +212,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(633, 559);
+            ClientSize = new Size(672, 559);
             Controls.Add(btnClose);
             Controls.Add(btnSave);
             Controls.Add(TotalPointsTextBox);
@@ -234,6 +235,7 @@
             MinimizeBox = false;
             Name = "ApplicantsForm";
             Text = "ApplicantsForm";
+            //FormClosing += ApplicantsForm_FormClosing;
             ((System.ComponentModel.ISupportInitialize)MathNumericUpDown).EndInit();
             ((System.ComponentModel.ISupportInitialize)RussianNumericUpDown).EndInit();
             ((System.ComponentModel.ISupportInitialize)ComputerNumericUpDown).EndInit();

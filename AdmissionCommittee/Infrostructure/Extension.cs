@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
-namespace AdmissionCommittee
+namespace AdmissionCommittee.Infrostructure
 {
     public static class Extension
     {
