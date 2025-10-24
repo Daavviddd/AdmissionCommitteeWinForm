@@ -1,4 +1,4 @@
-using AdmissionCommittee.Forms;
+п»їusing AdmissionCommittee.Forms;
 using AdmissionCommittee.Models;
 
 namespace AdmissionCommittee
@@ -6,17 +6,17 @@ namespace AdmissionCommittee
     public partial class MainForm : System.Windows.Forms.Form
     {
         /// <summary>
-        /// Список студентов
+        /// РЎРїРёСЃРѕРє СЃС‚СѓРґРµРЅС‚РѕРІ
         /// </summary>
         public readonly List<StudentModel> items;
 
         /// <summary>
-        /// Источник данных для DataGridView
+        /// РСЃС‚РѕС‡РЅРёРє РґР°РЅРЅС‹С… РґР»СЏ DataGridView
         /// </summary>
         public readonly BindingSource bindingSource = new();
 
         /// <summary>
-        /// Конструктор главной формы
+        /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РіР»Р°РІРЅРѕР№ С„РѕСЂРјС‹
         /// </summary>
         public MainForm()
         {
@@ -28,7 +28,7 @@ namespace AdmissionCommittee
             items.Add(new StudentModel()
             {
                 id = Guid.NewGuid(),
-                FullName = "Тест Тест Тест",
+                FullName = "РўРµСЃС‚ РўРµСЃС‚ РўРµСЃС‚",
                 Gender = Gender.Male,
                 Birthday = DateOnly.Parse("11.11.2002"),
                 EducationalForm = EducationalForm.FullTime,
@@ -40,7 +40,7 @@ namespace AdmissionCommittee
             items.Add(new StudentModel()
             {
                 id = Guid.NewGuid(),
-                FullName = "Тест2 Тест2 Тест2",
+                FullName = "РўРµСЃС‚2 РўРµСЃС‚2 РўРµСЃС‚2",
                 Gender = Gender.Male,
                 Birthday = DateOnly.Parse("11.11.2002"),
                 EducationalForm = EducationalForm.FullTime,
@@ -73,10 +73,10 @@ namespace AdmissionCommittee
                 switch (student.Gender)
                 {
                     case Gender.Male:
-                        e.Value = "Мужской";
+                        e.Value = "РњСѓР¶СЃРєРѕР№";
                         break;
                     case Gender.Female:
-                        e.Value = "Женский";
+                        e.Value = "Р–РµРЅСЃРєРёР№";
                         break;
                     default:
                         e.Value = string.Empty;
@@ -89,13 +89,13 @@ namespace AdmissionCommittee
                 switch (student.EducationalForm)
                 {
                     case EducationalForm.FullTime:
-                        e.Value = "Очная";
+                        e.Value = "РћС‡РЅР°СЏ";
                         break;
                     case EducationalForm.FullTimeAndPartTime:
-                        e.Value = "Очно-заочная";
+                        e.Value = "РћС‡РЅРѕ-Р·Р°РѕС‡РЅР°СЏ";
                         break;
                     case EducationalForm.CorrespondenceEducation:
-                        e.Value = "Заочная";
+                        e.Value = "Р—Р°РѕС‡РЅР°СЏ";
                         break;
                 }
 
@@ -205,7 +205,7 @@ namespace AdmissionCommittee
             var target = items.FirstOrDefault(x => x.id == student.id);
 
             if (target != null &&
-                MessageBox.Show($"Вы действительно желаете удалить '{target.FullName}' ?", "Удаление студента", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                MessageBox.Show($"Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ Р¶РµР»Р°РµС‚Рµ СѓРґР°Р»РёС‚СЊ '{target.FullName}' ?", "РЈРґР°Р»РµРЅРёРµ СЃС‚СѓРґРµРЅС‚Р°", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 items.Remove(target);
                 bindingSource.ResetBindings(false);
@@ -216,8 +216,8 @@ namespace AdmissionCommittee
 
         private void SetStatistic()
         {
-            NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {items.Count}";
-            ScoreEnoughPointsStatusLabel.Text = $"набрали больше 150 баллов: {items.Where(x => x.TotalAmountOfPoints > 150).Count()}";
+            NumberOfApplicantsStatusLabel.Text = $"РљРѕР»РёС‡РµСЃС‚РІРѕ Р°Р±РёС‚СѓСЂРёРµРЅС‚РѕРІ: {items.Count}";
+            ScoreEnoughPointsStatusLabel.Text = $"РЅР°Р±СЂР°Р»Рё Р±РѕР»СЊС€Рµ 150 Р±Р°Р»Р»РѕРІ: {items.Where(x => x.TotalAmountOfPoints > 150).Count()}";
         }
 
         private void ConfigureDataGridViewColumns()
