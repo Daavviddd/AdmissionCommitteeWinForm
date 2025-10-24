@@ -21,33 +21,18 @@ namespace AdmissionCommittee.Forms
 
             if (sourceStudent != null)
             {
-                targetStudent = new StudentModel
-                {
-                    id = sourceStudent.id,
-                    FullName = sourceStudent.FullName,
-                    Gender = sourceStudent.Gender,
-                    Birthday = sourceStudent.Birthday,
-                    EducationalForm = sourceStudent.EducationalForm,
-                    MathScores = sourceStudent.MathScores,
-                    PointsInRussianLanguage = sourceStudent.PointsInRussianLanguage,
-                    ComputerScienceScores = sourceStudent.ComputerScienceScores,
-                    TotalAmountOfPoints = sourceStudent.TotalAmountOfPoints,
-                };
+                targetStudent = sourceStudent.Clone();
                 btnSave.Text = "Сохранить";
             }
             else
             {
                 targetStudent = new StudentModel
                 {
-                    id = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     FullName = "",
-                    Gender = Gender.Unknow,
-                    Birthday = DateOnly.FromDateTime(DateTime.Now.AddYears(-18)),
+                    Gender = Gender.Male,
+                    Birthday = DateTime.Now.AddYears(-NumbersForValidation.MinStudentAge),
                     EducationalForm = EducationalForm.FullTime,
-                    MathScores = 0,
-                    PointsInRussianLanguage = 0,
-                    ComputerScienceScores = 0,
-                    TotalAmountOfPoints = 0,
                 };
             }
             GenderComboBox.DrawMode = DrawMode.OwnerDrawFixed;
@@ -61,11 +46,14 @@ namespace AdmissionCommittee.Forms
                 GenderComboBox.SelectedItem = sourceStudent.Gender;
                 EducationFormComboBox.SelectedItem = sourceStudent.EducationalForm;
             }
+            {
+                GenderComboBox.SelectedItem = Gender.Male;
+            }
 
-            var dateTimePickerBinding = new Binding("Value", targetStudent, "Birthday");
-            dateTimePickerBinding.Format += new ConvertEventHandler(DateOnlyToDateTime!);
-            dateTimePickerBinding.Parse += new ConvertEventHandler(DateTimeToDateOnly!);
-            BirthdayDateTimePicker.DataBindings.Add(dateTimePickerBinding);
+            BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-NumbersForValidation.MinStudentAge);
+            BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-NumbersForValidation.MaxStudentAge);
+
+            BirthdayDateTimePicker.AddBinding(x => x.Value, targetStudent, x => x.Birthday, errorProvider);
 
             FullNameTextBox.AddBinding(x => x.Text, targetStudent, x => x.FullName, errorProvider);
             GenderComboBox.AddBinding(x => x.SelectedValue!, targetStudent, x => x.Gender, errorProvider);
@@ -73,8 +61,7 @@ namespace AdmissionCommittee.Forms
             MathNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.MathScores, errorProvider);
             RussianNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.PointsInRussianLanguage, errorProvider);
             ComputerNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.ComputerScienceScores, errorProvider);
-            TotalPointsTextBox.AddBinding(x => x.Text, targetStudent, x => x.TotalAmountOfPoints, errorProvider);
-
+            
             MathNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
             RussianNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
             ComputerNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
@@ -82,24 +69,6 @@ namespace AdmissionCommittee.Forms
             UpdateTotalPoints();
 
             errorProvider.SetError(FullNameTextBox, "");
-        }
-
-        private void DateOnlyToDateTime(object sender, ConvertEventArgs e)
-        {
-            if (e.DesiredType == typeof(DateTime) && e.Value is DateOnly)
-            {
-                var dateOnly = (DateOnly)e.Value;
-
-                e.Value = new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day);
-            }
-        }
-
-        private void DateTimeToDateOnly(object sender, ConvertEventArgs e)
-        {
-            if (e.DesiredType == typeof(DateOnly) && e.Value is DateTime)
-            {
-                e.Value = DateOnly.FromDateTime((DateTime)e.Value);
-            }
         }
 
         private void NumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -112,10 +81,9 @@ namespace AdmissionCommittee.Forms
             var math = (float)MathNumericUpDown.Value;
             var russian = (float)RussianNumericUpDown.Value;
             var computer = (float)ComputerNumericUpDown.Value;
+            var total = math + russian + computer;
 
-            targetStudent.TotalAmountOfPoints = math + russian + computer;
-
-            TotalPointsTextBox.DataBindings["Text"]?.ReadValue();
+            TotalPointsTextBox.Text = total.ToString();
         }
 
         private void GenderComboBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -190,22 +158,6 @@ namespace AdmissionCommittee.Forms
             }
         }
 
-        private void GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (GenderComboBox.SelectedIndex >= 0)
-            {
-                targetStudent.Gender = (Gender)GenderComboBox.SelectedItem!;
-            }
-        }
-
-        private void EducationFormComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (EducationFormComboBox.SelectedIndex >= 0)
-            {
-                targetStudent.EducationalForm = (EducationalForm)EducationFormComboBox.SelectedItem!;
-            }
-        }
-
         private void FullNameTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsLetter(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
@@ -214,60 +166,37 @@ namespace AdmissionCommittee.Forms
             }
         }
 
-        private void BirthdayDateTimePicker_ValueChanged(object sender, EventArgs e)
-        {
-            var minYearStudent = -18;
-            var maxYearStudent = -80;
-
-            BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(minYearStudent);
-            BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(maxYearStudent);
-        }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
-
-            foreach (Binding binding in FullNameTextBox.DataBindings)
-            {
-                binding.WriteValue();
-            }
-            foreach (Binding binding in MathNumericUpDown.DataBindings)
-            {
-                binding.WriteValue();
-            }
-            foreach (Binding binding in RussianNumericUpDown.DataBindings)
-            {
-                binding.WriteValue();
-            }
-            foreach (Binding binding in ComputerNumericUpDown.DataBindings)
-            {
-                binding.WriteValue();
-            }
 
             var validationContext = new ValidationContext(targetStudent);
             var validationResults = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(targetStudent, validationContext, validationResults, true);
 
-            if (string.IsNullOrWhiteSpace(targetStudent.FullName))
+            foreach (var validationResult in validationResults)
             {
-                errorProvider.SetError(FullNameTextBox, "ФИО обязательно для заполнения");
-                isValid = false;
-            }
-
-            if (targetStudent.Gender == Gender.Unknow)
-            {
-                errorProvider.SetError(GenderComboBox, "Выберите пол");
-                isValid = false;
-            }
-
-            if (targetStudent.TotalAmountOfPoints == 0)
-            {
-                errorProvider.SetError(TotalPointsTextBox, "Сумма баллов должна быть больше 0");
-                isValid = false;
-            }
-            else
-            {
-                errorProvider.SetError(TotalPointsTextBox, "");
+                foreach (var memberName in validationResult.MemberNames)
+                {
+                    switch (memberName)
+                    {
+                        case nameof(StudentModel.FullName):
+                            errorProvider.SetError(FullNameTextBox, validationResult.ErrorMessage);
+                            break;
+                        case nameof(StudentModel.Gender):
+                            errorProvider.SetError(GenderComboBox, validationResult.ErrorMessage);
+                            break;
+                        case nameof(StudentModel.MathScores):
+                            errorProvider.SetError(MathNumericUpDown, validationResult.ErrorMessage);
+                            break;
+                        case nameof(StudentModel.PointsInRussianLanguage):
+                            errorProvider.SetError(RussianNumericUpDown, validationResult.ErrorMessage);
+                            break;
+                        case nameof(StudentModel.ComputerScienceScores):
+                            errorProvider.SetError(ComputerNumericUpDown, validationResult.ErrorMessage);
+                            break;
+                    }
+                }
             }
 
             if (isValid)

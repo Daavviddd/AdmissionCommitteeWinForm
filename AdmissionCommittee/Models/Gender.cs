@@ -3,21 +3,21 @@
     /// <summary>
     /// Пол абитуриента
     /// </summary>
-    public enum Gender: byte
+    public enum Gender
     {
         /// <summary>
         /// Не известен пол
         /// </summary>
-        Unknow = 0,
+        Unknow,
 
         /// <summary>
-        /// мужской
+        /// Мужской
         /// </summary>
-        Male = 1,
+        Male,
 
         /// <summary>
-        /// женский
+        /// Женский
         /// </summary>
-        Female = 2,
+        Female,
     }
 }

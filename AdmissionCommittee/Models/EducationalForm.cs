@@ -3,21 +3,21 @@
     /// <summary>
     /// Форма обучения
     /// </summary>
-    public enum EducationalForm : byte
+    public enum EducationalForm
     {
         /// <summary>
         /// Очная
         /// </summary>
-        FullTime = 0,
+        FullTime,
 
         /// <summary>
         /// Очно-заочная
         /// </summary>
-        FullTimeAndPartTime = 1,
+        FullTimeAndPartTime,
 
         /// <summary>
         /// Заочная
         /// </summary>
-        CorrespondenceEducation = 2
+        CorrespondenceEducation
     }
 }

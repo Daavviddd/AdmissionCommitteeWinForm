@@ -1,61 +1,85 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Windows.Forms;
 
 namespace AdmissionCommittee.Models
 {
     /// <summary>
-    /// LolMiner
+    /// Класс данных студента
     /// </summary>
     public class StudentModel
     {
         /// <summary>
-        /// id
+        /// Id
         /// </summary>
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// ФИО
         /// </summary>
-        [Required]
-        [StringLength(255)]
+        [Required(ErrorMessage = "Поле {0} обязательно для заполнения")]
+        [StringLength(NumbersForValidation.MaxFullNameSize, ErrorMessage = "Поле {0} должно содержать не более {1} символов")]
         public string FullName { get; set; } = string.Empty;
 
         /// <summary>
         /// Гендер
         /// </summary>
+        [Display(Name = "Пол")]
+        [Range(1, 2, ErrorMessage = "Поле '{0}' обязательно для выбора")]
         public Gender Gender { get; set; }
 
         /// <summary>
-        /// дата рождения
+        /// Дата рождения
         /// </summary>
-        public DateOnly Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         /// <summary>
-        /// форма обучения
+        /// Форма обучения
         /// </summary>
         public EducationalForm EducationalForm { get; set; }
 
         /// <summary>
-        /// баллы ЕГЭ по математике
+        /// Баллы ЕГЭ по математике
         /// </summary>
-        [Range(0, 100)]
+        [Display(Name = "Баллы по математике")]
+        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxExamScore,
+            ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float MathScores { get; set; }
 
         /// <summary>
-        /// баллы ЕГЭ по русскому языку
+        /// Баллы ЕГЭ по русскому языку
         /// </summary>
-        [Range(0, 100)]
+        [Display(Name = "Баллы по русскому языку")]
+        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxExamScore,
+            ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float PointsInRussianLanguage { get; set; }
 
         /// <summary>
-        /// баллы ЕГЭ по информатике
+        /// Баллы ЕГЭ по информатике
         /// </summary>
-        [Range(0, 100)]
+        [Display(Name = "Баллы по информатике")]
+        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxExamScore,
+            ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float ComputerScienceScores { get; set; }
 
         /// <summary>
-        /// общая сумма баллов
+        /// Общая сумма баллов
         /// </summary>
-        [Range(0, 300)]
-        public float TotalAmountOfPoints { get; set; }
+        [Display(Name = "Общая сумма баллов")]
+        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxTotalScore,
+            ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
+        public float TotalAmountOfPoints => ComputerScienceScores + PointsInRussianLanguage + MathScores;
+
+        /// <summary>
+        /// Форматированная дата рождения для отображения
+        /// </summary>
+        public string BirthdayDisplay => Birthday.ToString("dd.MM.yyyy");
+
+        /// <summary>
+        /// Создает поверхностную копию объекта StudentModel
+        /// </summary>
+        public StudentModel Clone()
+        {
+            return (StudentModel)MemberwiseClone();
+        }
     }
 }

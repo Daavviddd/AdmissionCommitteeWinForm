@@ -78,7 +78,7 @@
             EditButton.Name = "EditButton";
             EditButton.Size = new Size(29, 24);
             EditButton.Text = "Редактирование";
-            EditButton.Click += this.EditButton_Click;
+            EditButton.Click += EditButton_Click;
             // 
             // DeleteButton
             // 
@@ -88,7 +88,7 @@
             DeleteButton.Name = "DeleteButton";
             DeleteButton.Size = new Size(29, 24);
             DeleteButton.Text = "Удаление";
-            DeleteButton.Click += this.DeleteButton_Click;
+            DeleteButton.Click += DeleteButton_Click;
             // 
             // InfoStatusStrip
             // 
@@ -114,12 +114,15 @@
             // 
             // StudentDataGridView
             // 
+            StudentDataGridView.AllowUserToAddRows = false;
+            StudentDataGridView.AllowUserToDeleteRows = false;
             StudentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             StudentDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             StudentDataGridView.Columns.AddRange(new DataGridViewColumn[] { FullNameColumn, BirthdayColumn, GenderColumn, EducationalFormColumn, MathScoreColumn, PointsInRussianLanguage, ComputerScienceScores, TotalAmountOfPoints });
             StudentDataGridView.Dock = DockStyle.Fill;
             StudentDataGridView.Location = new Point(0, 27);
             StudentDataGridView.Name = "StudentDataGridView";
+            StudentDataGridView.ReadOnly = true;
             StudentDataGridView.RowHeadersWidth = 51;
             StudentDataGridView.Size = new Size(999, 419);
             StudentDataGridView.TabIndex = 2;
@@ -131,48 +134,56 @@
             FullNameColumn.HeaderText = "ФИО";
             FullNameColumn.MinimumWidth = 6;
             FullNameColumn.Name = "FullNameColumn";
+            FullNameColumn.ReadOnly = true;
             // 
             // BirthdayColumn
             // 
             BirthdayColumn.HeaderText = "Дата рождения";
             BirthdayColumn.MinimumWidth = 6;
             BirthdayColumn.Name = "BirthdayColumn";
+            BirthdayColumn.ReadOnly = true;
             // 
             // GenderColumn
             // 
             GenderColumn.HeaderText = "Пол";
             GenderColumn.MinimumWidth = 6;
             GenderColumn.Name = "GenderColumn";
+            GenderColumn.ReadOnly = true;
             // 
             // EducationalFormColumn
             // 
             EducationalFormColumn.HeaderText = "Форма обучения";
             EducationalFormColumn.MinimumWidth = 6;
             EducationalFormColumn.Name = "EducationalFormColumn";
+            EducationalFormColumn.ReadOnly = true;
             // 
             // MathScoreColumn
             // 
             MathScoreColumn.HeaderText = "Баллы по математике";
             MathScoreColumn.MinimumWidth = 6;
             MathScoreColumn.Name = "MathScoreColumn";
+            MathScoreColumn.ReadOnly = true;
             // 
             // PointsInRussianLanguage
             // 
             PointsInRussianLanguage.HeaderText = "Баллы по русскому языку";
             PointsInRussianLanguage.MinimumWidth = 6;
             PointsInRussianLanguage.Name = "PointsInRussianLanguage";
+            PointsInRussianLanguage.ReadOnly = true;
             // 
             // ComputerScienceScores
             // 
             ComputerScienceScores.HeaderText = "Баллы по информатике";
             ComputerScienceScores.MinimumWidth = 6;
             ComputerScienceScores.Name = "ComputerScienceScores";
+            ComputerScienceScores.ReadOnly = true;
             // 
             // TotalAmountOfPoints
             // 
             TotalAmountOfPoints.HeaderText = "Общее кол-во балов";
             TotalAmountOfPoints.MinimumWidth = 6;
             TotalAmountOfPoints.Name = "TotalAmountOfPoints";
+            TotalAmountOfPoints.ReadOnly = true;
             // 
             // MainForm
             // 

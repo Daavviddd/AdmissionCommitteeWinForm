@@ -139,7 +139,7 @@
             GenderComboBox.Size = new Size(376, 28);
             GenderComboBox.TabIndex = 9;
             GenderComboBox.DrawItem += GenderComboBox_DrawItem;
-            GenderComboBox.SelectedIndexChanged += GenderComboBox_SelectedIndexChanged;
+            //GenderComboBox.SelectedIndexChanged += GenderComboBox_SelectedIndexChanged;
             // 
             // BirthdayDateTimePicker
             // 
@@ -147,7 +147,7 @@
             BirthdayDateTimePicker.Name = "BirthdayDateTimePicker";
             BirthdayDateTimePicker.Size = new Size(376, 27);
             BirthdayDateTimePicker.TabIndex = 10;
-            BirthdayDateTimePicker.ValueChanged += BirthdayDateTimePicker_ValueChanged;
+            //BirthdayDateTimePicker.ValueChanged += BirthdayDateTimePicker_ValueChanged;
             // 
             // EducationFormComboBox
             // 
@@ -157,7 +157,7 @@
             EducationFormComboBox.Size = new Size(376, 28);
             EducationFormComboBox.TabIndex = 11;
             EducationFormComboBox.DrawItem += EducationFormComboBox_DrawItem;
-            EducationFormComboBox.SelectedIndexChanged += EducationFormComboBox_SelectedIndexChanged;
+            //EducationFormComboBox.SelectedIndexChanged += EducationFormComboBox_SelectedIndexChanged;
             // 
             // MathNumericUpDown
             // 

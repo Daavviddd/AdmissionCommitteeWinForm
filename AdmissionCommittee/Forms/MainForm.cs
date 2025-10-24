@@ -20,34 +20,28 @@ namespace AdmissionCommittee
         /// </summary>
         public MainForm()
         {
-            var math = 0f;
-            var russian = 0f;
-            var computer = 0f;
-
             items = new List<StudentModel>();
             items.Add(new StudentModel()
             {
-                id = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 FullName = "Тест Тест Тест",
                 Gender = Gender.Male,
-                Birthday = DateOnly.Parse("11.11.2002"),
+                Birthday = new DateTime(2002, 11, 11),
                 EducationalForm = EducationalForm.FullTime,
-                MathScores = math = 85f,
-                PointsInRussianLanguage = russian = 80f,
-                ComputerScienceScores = computer = 70f,
-                TotalAmountOfPoints = math + russian + computer,
+                MathScores = 85f,
+                PointsInRussianLanguage = 80f,
+                ComputerScienceScores = 70f,
             });
             items.Add(new StudentModel()
             {
-                id = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 FullName = "Тест2 Тест2 Тест2",
                 Gender = Gender.Male,
-                Birthday = DateOnly.Parse("11.11.2002"),
+                Birthday = new DateTime(2003, 11, 12),
                 EducationalForm = EducationalForm.FullTime,
-                MathScores = math = 15f,
-                PointsInRussianLanguage = russian = 40f,
-                ComputerScienceScores = computer = 30f,
-                TotalAmountOfPoints = math + russian + computer,
+                MathScores = 15f,
+                PointsInRussianLanguage = 40f,
+                ComputerScienceScores = 30f,
             });
             InitializeComponent();
             SetStatistic();
@@ -105,9 +99,9 @@ namespace AdmissionCommittee
 
         private void StudentDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            var totalPoints = 300;
-            var padding = 2;
-            var progressBarHeightReduction = 4;
+            var totalPoints = NumbersForValidation.MaxTotalScore;
+            var padding = NumbersForValidation.ProgressBarPadding;
+            var progressBarHeightReduction = NumbersForValidation.ProgressBarHeightReduction;
 
             if (e.ColumnIndex < 0 || e.RowIndex < 0)
             {
@@ -158,9 +152,8 @@ namespace AdmissionCommittee
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
                 items.Add(applicants.CurrentStudent);
-                bindingSource.ResetBindings(false);
 
-                SetStatistic();
+                OnUpdate();
             }
         }
 
@@ -176,7 +169,7 @@ namespace AdmissionCommittee
 
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
-                var target = items.FirstOrDefault(x => x.id == applicants.CurrentStudent.id);
+                var target = items.FirstOrDefault(x => x.Id == applicants.CurrentStudent.Id);
 
                 if (target != null)
                 {
@@ -187,9 +180,8 @@ namespace AdmissionCommittee
                     target.MathScores = applicants.CurrentStudent.MathScores;
                     target.PointsInRussianLanguage = applicants.CurrentStudent.PointsInRussianLanguage;
                     target.ComputerScienceScores = applicants.CurrentStudent.ComputerScienceScores;
-                    target.TotalAmountOfPoints = applicants.CurrentStudent.TotalAmountOfPoints;
-                    bindingSource.ResetBindings(false);
-                    SetStatistic();
+
+                    OnUpdate();
                 }
             }
         }
@@ -202,28 +194,33 @@ namespace AdmissionCommittee
             }
 
             var student = (StudentModel)StudentDataGridView.SelectedRows[0].DataBoundItem;
-            var target = items.FirstOrDefault(x => x.id == student.id);
+            var target = items.FirstOrDefault(x => x.Id == student.Id);
 
             if (target != null &&
                 MessageBox.Show($"Вы действительно желаете удалить '{target.FullName}' ?", "Удаление студента", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 items.Remove(target);
-                bindingSource.ResetBindings(false);
 
-                SetStatistic();
+                OnUpdate();
             }
+        }
+
+        private void OnUpdate()
+        {
+            bindingSource.ResetBindings(false);
+            SetStatistic();
         }
 
         private void SetStatistic()
         {
             NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {items.Count}";
-            ScoreEnoughPointsStatusLabel.Text = $"набрали больше 150 баллов: {items.Where(x => x.TotalAmountOfPoints > 150).Count()}";
+            ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {NumbersForValidation.RequiredNumberOfPoints} баллов: " + $"{items.Count(x => x.TotalAmountOfPoints > NumbersForValidation.RequiredNumberOfPoints)}";
         }
 
         private void ConfigureDataGridViewColumns()
         {
             FullNameColumn.DataPropertyName = nameof(StudentModel.FullName);
-            BirthdayColumn.DataPropertyName = nameof(StudentModel.Birthday);
+            BirthdayColumn.DataPropertyName = nameof(StudentModel.BirthdayDisplay);
             GenderColumn.DataPropertyName = nameof(StudentModel.Gender);
             EducationalFormColumn.DataPropertyName = nameof(StudentModel.EducationalForm);
             MathScoreColumn.DataPropertyName = nameof(StudentModel.MathScores);
