@@ -26,14 +26,7 @@ namespace AdmissionCommittee.Forms
             }
             else
             {
-                targetStudent = new StudentModel
-                {
-                    Id = Guid.NewGuid(),
-                    FullName = "",
-                    Gender = Gender.Male,
-                    Birthday = DateTime.Now.AddYears(-NumbersForValidation.MinStudentAge),
-                    EducationalForm = EducationalForm.FullTime,
-                };
+                targetStudent = new StudentModel();
             }
             GenderComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             EducationFormComboBox.DrawMode = DrawMode.OwnerDrawFixed;
@@ -46,9 +39,13 @@ namespace AdmissionCommittee.Forms
                 GenderComboBox.SelectedItem = sourceStudent.Gender;
                 EducationFormComboBox.SelectedItem = sourceStudent.EducationalForm;
             }
+            else
             {
                 GenderComboBox.SelectedItem = Gender.Male;
+                EducationFormComboBox.SelectedItem = EducationalForm.FullTime;
             }
+
+            
 
             BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-NumbersForValidation.MinStudentAge);
             BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-NumbersForValidation.MaxStudentAge);

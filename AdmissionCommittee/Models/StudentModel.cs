@@ -11,7 +11,7 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Id
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
         /// ФИО
@@ -30,7 +30,7 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Дата рождения
         /// </summary>
-        public DateTime Birthday { get; set; }
+        public DateTime Birthday { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Форма обучения
@@ -64,9 +64,6 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Общая сумма баллов
         /// </summary>
-        [Display(Name = "Общая сумма баллов")]
-        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxTotalScore,
-            ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float TotalAmountOfPoints => ComputerScienceScores + PointsInRussianLanguage + MathScores;
 
         /// <summary>
