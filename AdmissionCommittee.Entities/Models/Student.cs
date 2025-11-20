@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Windows.Forms;
 
 namespace AdmissionCommittee.Models
 {
     /// <summary>
     /// Класс данных студента
     /// </summary>
-    public class StudentModel
+    public class Student
     {
         /// <summary>
         /// Id
@@ -23,8 +22,6 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Гендер
         /// </summary>
-        [Display(Name = "Пол")]
-        [Range(1, 2, ErrorMessage = "Поле '{0}' обязательно для выбора")]
         public Gender Gender { get; set; }
 
         /// <summary>
@@ -74,9 +71,9 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Создает поверхностную копию объекта StudentModel
         /// </summary>
-        public StudentModel Clone()
+        public Student Clone()
         {
-            return (StudentModel)MemberwiseClone();
+            return (Student)MemberwiseClone();
         }
     }
 }

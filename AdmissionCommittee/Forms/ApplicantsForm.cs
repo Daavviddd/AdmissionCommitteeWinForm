@@ -1,19 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Infrostructure;
 using AdmissionCommittee.Models;
+using AdmissionCommittee.Services;
 
 namespace AdmissionCommittee.Forms
 {
     public partial class ApplicantsForm : Form
     {
-        private readonly StudentModel targetStudent;
+        private readonly Student targetStudent;
 
         private readonly ErrorProvider errorProvider = new ErrorProvider();
 
         /// <summary>
         /// Конструктор добавления и редактирования студента
         /// </summary>
-        public ApplicantsForm(StudentModel? sourceStudent = null)
+        public ApplicantsForm(Student? sourceStudent = null, IValidationService validationService = null)
         {
             InitializeComponent();
 
@@ -26,7 +28,7 @@ namespace AdmissionCommittee.Forms
             }
             else
             {
-                targetStudent = new StudentModel();
+                targetStudent = new Student();
             }
             GenderComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             EducationFormComboBox.DrawMode = DrawMode.OwnerDrawFixed;
@@ -177,19 +179,19 @@ namespace AdmissionCommittee.Forms
                 {
                     switch (memberName)
                     {
-                        case nameof(StudentModel.FullName):
+                        case nameof(Student.FullName):
                             errorProvider.SetError(FullNameTextBox, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.Gender):
+                        case nameof(Student.Gender):
                             errorProvider.SetError(GenderComboBox, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.MathScores):
+                        case nameof(Student.MathScores):
                             errorProvider.SetError(MathNumericUpDown, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.PointsInRussianLanguage):
+                        case nameof(Student.PointsInRussianLanguage):
                             errorProvider.SetError(RussianNumericUpDown, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.ComputerScienceScores):
+                        case nameof(Student.ComputerScienceScores):
                             errorProvider.SetError(ComputerNumericUpDown, validationResult.ErrorMessage);
                             break;
                     }
@@ -201,10 +203,6 @@ namespace AdmissionCommittee.Forms
                 MessageBox.Show("Данные успешно добавлены", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
-            }
-            else
-            {
-                var errorMessages = validationResults.Select(vr => vr.ErrorMessage);
             }
         }
 
@@ -223,6 +221,6 @@ namespace AdmissionCommittee.Forms
         /// <summary>
         /// Текущий абитуриент 
         /// </summary>
-        public StudentModel CurrentStudent => targetStudent;
+        public Student CurrentStudent => targetStudent;
     }
 }
