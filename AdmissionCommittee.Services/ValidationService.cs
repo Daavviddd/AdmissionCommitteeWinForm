@@ -28,8 +28,8 @@ namespace AdmissionCommittee.Services
                 var age = DateTime.Now.Year - student.Birthday.Year;
                 if (student.Birthday > DateTime.Now.AddYears(-age)) age--;
 
-                if (age < NumbersForValidation.MinStudentAge || age > NumbersForValidation.MaxStudentAge)
-                    errors.Add($"Возраст должен быть от {NumbersForValidation.MinStudentAge} до {NumbersForValidation.MaxStudentAge} лет");
+                if (age < ValidationConstants.MinStudentAge || age > ValidationConstants.MaxStudentAge)
+                    errors.Add($"Возраст должен быть от {ValidationConstants.MinStudentAge} до {ValidationConstants.MaxStudentAge} лет");
 
                 return (errors.Count == 0, errors);
             });
@@ -41,7 +41,7 @@ namespace AdmissionCommittee.Services
         public async Task<bool> IsStudentPassedAsync(Student student)
         {
             return await Task.Run(() =>
-                student.TotalAmountOfPoints >= NumbersForValidation.RequiredNumberOfPoints);
+                student.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
         }
     }
 }

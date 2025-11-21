@@ -49,8 +49,8 @@ namespace AdmissionCommittee.Forms
 
             
 
-            BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-NumbersForValidation.MinStudentAge);
-            BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-NumbersForValidation.MaxStudentAge);
+            BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-ValidationConstants.MinStudentAge);
+            BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-ValidationConstants.MaxStudentAge);
 
             BirthdayDateTimePicker.AddBinding(x => x.Value, targetStudent, x => x.Birthday, errorProvider);
 

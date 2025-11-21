@@ -71,7 +71,7 @@ namespace AdmissionCommittee.Services
             return await Task.Run(() =>
             {
                 var total = students.Count;
-                var passed = students.Count(s => s.TotalAmountOfPoints >= NumbersForValidation.RequiredNumberOfPoints);
+                var passed = students.Count(s => s.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
                 return (total, passed);
             });
         }

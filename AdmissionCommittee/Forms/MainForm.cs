@@ -107,9 +107,9 @@ namespace AdmissionCommittee
 
         private void StudentDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            var totalPoints = NumbersForValidation.MaxTotalScore;
-            var padding = NumbersForValidation.ProgressBarPadding;
-            var progressBarHeightReduction = NumbersForValidation.ProgressBarHeightReduction;
+            var totalPoints = ValidationConstants.MaxTotalScore;
+            var padding = ValidationConstants.ProgressBarPadding;
+            var progressBarHeightReduction = ValidationConstants.ProgressBarHeightReduction;
 
             if (e.ColumnIndex < 0 || e.RowIndex < 0)
             {
@@ -222,7 +222,7 @@ namespace AdmissionCommittee
         private void SetStatistic()
         {
             NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {items.Count}";
-            ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {NumbersForValidation.RequiredNumberOfPoints} баллов: " + $"{items.Count(x => x.TotalAmountOfPoints > NumbersForValidation.RequiredNumberOfPoints)}";
+            ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {ValidationConstants.RequiredNumberOfPoints} баллов: " + $"{items.Count(x => x.TotalAmountOfPoints > ValidationConstants.RequiredNumberOfPoints)}";
         }
 
         private void ConfigureDataGridViewColumns()

@@ -3,7 +3,7 @@
     /// <summary>
     /// Числа для валидации
     /// </summary>
-    public static class NumbersForValidation
+    public static class ValidationConstants
     {
         /// <summary>
         /// Минимальные баллы экзамена
