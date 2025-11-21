@@ -3,8 +3,14 @@ using System.Linq.Expressions;
 
 namespace AdmissionCommittee.Infrostructure
 {
+    /// <summary>
+    /// Предоставляет extension-методы для работы с data binding
+    /// </summary>
     public static class Extension
     {
+        /// <summary>
+        /// Создает двустороннюю привязку данных между свойством контрола и свойством источника данных
+        /// </summary>
         public static void AddBinding<TControl, TSourse>(this TControl control,
             Expression<Func<TControl, object>> destinationProperty,
             TSourse source,
@@ -37,6 +43,9 @@ namespace AdmissionCommittee.Infrostructure
             }
         }
 
+        /// <summary>
+        /// Извлекает имя свойства из expression tree
+        /// </summary>
         static string GetPropertyName<TType>(Expression<Func<TType, object>> expression)
         {
             Expression body = expression.Body;

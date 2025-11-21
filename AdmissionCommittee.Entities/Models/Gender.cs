@@ -6,11 +6,6 @@
     public enum Gender
     {
         /// <summary>
-        /// Не известен пол
-        /// </summary>
-        Unknow,
-
-        /// <summary>
         /// Мужской
         /// </summary>
         Male,

@@ -1,27 +1,33 @@
-﻿using AdmissionCommittee.Forms;
+﻿using AdmissionCommittee.Contracts;
+using AdmissionCommittee.Forms;
 using AdmissionCommittee.Models;
 
 namespace AdmissionCommittee
 {
-    public partial class MainForm : System.Windows.Forms.Form
+    /// <summary>
+    /// Главная форма приложения "Приемная комиссия" для управления списком студентов
+    /// </summary>
+    public partial class MainForm : Form
     {
         /// <summary>
         /// Список студентов
         /// </summary>
-        public readonly List<StudentModel> items;
+        public readonly List<Student> items;
 
         /// <summary>
         /// Источник данных для DataGridView
         /// </summary>
         public readonly BindingSource bindingSource = new();
 
+        private readonly IStudentService iStudentService;
+
         /// <summary>
         /// Конструктор главной формы
         /// </summary>
-        public MainForm()
+        public MainForm(IStudentService studentService)
         {
-            items = new List<StudentModel>();
-            items.Add(new StudentModel()
+            items = new List<Student>();
+            items.Add(new Student()
             {
                 Id = Guid.NewGuid(),
                 FullName = "Тест Тест Тест",
@@ -32,7 +38,7 @@ namespace AdmissionCommittee
                 PointsInRussianLanguage = 80f,
                 ComputerScienceScores = 70f,
             });
-            items.Add(new StudentModel()
+            items.Add(new Student()
             {
                 Id = Guid.NewGuid(),
                 FullName = "Тест2 Тест2 Тест2",
@@ -43,7 +49,11 @@ namespace AdmissionCommittee
                 PointsInRussianLanguage = 40f,
                 ComputerScienceScores = 30f,
             });
+            iStudentService = studentService;
             InitializeComponent();
+
+            var students = iStudentService.GetAllStudentsAsync();
+
             SetStatistic();
 
             StudentDataGridView.AutoGenerateColumns = false;
@@ -57,12 +67,12 @@ namespace AdmissionCommittee
         {
             var col = StudentDataGridView.Columns[e.ColumnIndex];
 
-            if (!(StudentDataGridView.Rows[e.RowIndex].DataBoundItem is StudentModel student))
+            if (!(StudentDataGridView.Rows[e.RowIndex].DataBoundItem is Student student))
             {
                 return;
             }
 
-            if (col.DataPropertyName == nameof(StudentModel.Gender))
+            if (col.DataPropertyName == nameof(Student.Gender))
             {
                 switch (student.Gender)
                 {
@@ -78,7 +88,7 @@ namespace AdmissionCommittee
                 }
             }
 
-            if (col.DataPropertyName == nameof(StudentModel.EducationalForm))
+            if (col.DataPropertyName == nameof(Student.EducationalForm))
             {
                 switch (student.EducationalForm)
                 {
@@ -99,9 +109,9 @@ namespace AdmissionCommittee
 
         private void StudentDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            var totalPoints = NumbersForValidation.MaxTotalScore;
-            var padding = NumbersForValidation.ProgressBarPadding;
-            var progressBarHeightReduction = NumbersForValidation.ProgressBarHeightReduction;
+            var totalPoints = ValidationConstants.MaxTotalScore;
+            var padding = ValidationConstants.ProgressBarPadding;
+            var progressBarHeightReduction = ValidationConstants.ProgressBarHeightReduction;
 
             if (e.ColumnIndex < 0 || e.RowIndex < 0)
             {
@@ -111,13 +121,13 @@ namespace AdmissionCommittee
             var col = StudentDataGridView.Columns[e.ColumnIndex];
             var colName = col.Name;
 
-            if (colName != nameof(StudentModel.TotalAmountOfPoints))
+            if (colName != nameof(Student.TotalAmountOfPoints))
             {
                 e.Handled = false;
                 return;
             }
 
-            if (!(StudentDataGridView.Rows[e.RowIndex].DataBoundItem is StudentModel student))
+            if (!(StudentDataGridView.Rows[e.RowIndex].DataBoundItem is Student student))
             {
                 e.Handled = false;
                 return;
@@ -164,7 +174,7 @@ namespace AdmissionCommittee
                 return;
             }
 
-            var student = (StudentModel)StudentDataGridView.SelectedRows[0].DataBoundItem;
+            var student = (Student)StudentDataGridView.SelectedRows[0].DataBoundItem;
             var applicants = new ApplicantsForm(student);
 
             if (applicants.ShowDialog(this) == DialogResult.OK)
@@ -193,7 +203,7 @@ namespace AdmissionCommittee
                 return;
             }
 
-            var student = (StudentModel)StudentDataGridView.SelectedRows[0].DataBoundItem;
+            var student = (Student)StudentDataGridView.SelectedRows[0].DataBoundItem;
             var target = items.FirstOrDefault(x => x.Id == student.Id);
 
             if (target != null &&
@@ -214,19 +224,19 @@ namespace AdmissionCommittee
         private void SetStatistic()
         {
             NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {items.Count}";
-            ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {NumbersForValidation.RequiredNumberOfPoints} баллов: " + $"{items.Count(x => x.TotalAmountOfPoints > NumbersForValidation.RequiredNumberOfPoints)}";
+            ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {ValidationConstants.RequiredNumberOfPoints} баллов: " + $"{items.Count(x => x.TotalAmountOfPoints > ValidationConstants.RequiredNumberOfPoints)}";
         }
 
         private void ConfigureDataGridViewColumns()
         {
-            FullNameColumn.DataPropertyName = nameof(StudentModel.FullName);
-            BirthdayColumn.DataPropertyName = nameof(StudentModel.BirthdayDisplay);
-            GenderColumn.DataPropertyName = nameof(StudentModel.Gender);
-            EducationalFormColumn.DataPropertyName = nameof(StudentModel.EducationalForm);
-            MathScoreColumn.DataPropertyName = nameof(StudentModel.MathScores);
-            PointsInRussianLanguage.DataPropertyName = nameof(StudentModel.PointsInRussianLanguage);
-            ComputerScienceScores.DataPropertyName = nameof(StudentModel.ComputerScienceScores);
-            TotalAmountOfPoints.DataPropertyName = nameof(StudentModel.TotalAmountOfPoints);
+            FullNameColumn.DataPropertyName = nameof(Student.FullName);
+            BirthdayColumn.DataPropertyName = nameof(Student.BirthdayDisplay);
+            GenderColumn.DataPropertyName = nameof(Student.Gender);
+            EducationalFormColumn.DataPropertyName = nameof(Student.EducationalForm);
+            MathScoreColumn.DataPropertyName = nameof(Student.MathScores);
+            PointsInRussianLanguage.DataPropertyName = nameof(Student.PointsInRussianLanguage);
+            ComputerScienceScores.DataPropertyName = nameof(Student.ComputerScienceScores);
+            TotalAmountOfPoints.DataPropertyName = nameof(Student.TotalAmountOfPoints);
         }
     }
 }

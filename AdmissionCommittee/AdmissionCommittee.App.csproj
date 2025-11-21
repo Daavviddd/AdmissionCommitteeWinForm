@@ -8,4 +8,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="David5_5David.AdmissionCommittee.Services" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.Services.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
