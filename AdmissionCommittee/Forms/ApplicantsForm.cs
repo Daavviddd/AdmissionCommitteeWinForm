@@ -2,15 +2,22 @@
 using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Infrostructure;
 using AdmissionCommittee.Models;
-using AdmissionCommittee.Services;
 
 namespace AdmissionCommittee.Forms
 {
+    /// <summary>
+    /// Форма для добавления и редактирования данных абитуриента
+    /// </summary>
     public partial class ApplicantsForm : Form
     {
         private readonly Student targetStudent;
 
         private readonly ErrorProvider errorProvider = new ErrorProvider();
+
+        /// <summary>
+        /// Текущий абитуриент 
+        /// </summary>
+        public Student CurrentStudent => targetStudent;
 
         /// <summary>
         /// Конструктор добавления и редактирования студента
@@ -215,12 +222,6 @@ namespace AdmissionCommittee.Forms
                 DialogResult = DialogResult.Cancel;
                 Close();
             }
-
         }
-
-        /// <summary>
-        /// Текущий абитуриент 
-        /// </summary>
-        public Student CurrentStudent => targetStudent;
     }
 }

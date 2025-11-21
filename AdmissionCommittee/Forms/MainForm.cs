@@ -1,11 +1,13 @@
 ﻿using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Forms;
 using AdmissionCommittee.Models;
-using AdmissionCommittee.Services;
 
 namespace AdmissionCommittee
 {
-    public partial class MainForm : System.Windows.Forms.Form
+    /// <summary>
+    /// Главная форма приложения "Приемная комиссия" для управления списком студентов
+    /// </summary>
+    public partial class MainForm : Form
     {
         /// <summary>
         /// Список студентов

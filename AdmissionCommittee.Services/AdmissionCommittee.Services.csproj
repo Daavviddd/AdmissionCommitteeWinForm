@@ -1,13 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Authors>David5_5David</Authors>
+		<Product>David5_5David.$(AssemblyName)</Product>
+		<PackageId>David5_5David.$(AssemblyName)</PackageId>
+		<Description>AdmissionCommittee.Services Детков Давид ИП-22-3</Description>
+		<Version>1.0.1</Version>
+		<PackageTags>MainForm; Service</PackageTags>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.Services.Contracts.csproj" />
+	  <ProjectReference Include="..\AdmissionCommittee.Entities.Constants\AdmissionCommittee.Entities.Constants.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<None Update="icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Update="README.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Update="LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+	
 </Project>
