@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Models;
+using AdmissionCommittee.Services.Contracts;
 
 namespace AdmissionCommittee.Services
 {
@@ -12,7 +13,7 @@ namespace AdmissionCommittee.Services
         /// <summary>
         /// Выполняет валидацию данных студента асинхронно
         /// </summary>
-        public async Task<(bool isValid, List<string> errors)> ValidateStudentAsync(Student student)
+        public async Task<StudentValidationResult> ValidateStudentAsync(Student student)
         {
             return await Task.Run(() =>
             {
@@ -23,25 +24,32 @@ namespace AdmissionCommittee.Services
                 var isValid = Validator.TryValidateObject(student, context, results, true);
 
                 if (!isValid)
+                {
                     errors.AddRange(results.Select(r => r.ErrorMessage));
+                }
 
                 var age = DateTime.Now.Year - student.Birthday.Year;
-                if (student.Birthday > DateTime.Now.AddYears(-age)) age--;
+                if (student.Birthday > DateTime.Now.AddYears(-age))
+                {
+                    age--;
+                }
 
                 if (age < ValidationConstants.MinStudentAge || age > ValidationConstants.MaxStudentAge)
-                    errors.Add($"Возраст должен быть от {ValidationConstants.MinStudentAge} до {ValidationConstants.MaxStudentAge} лет");
-
-                return (errors.Count == 0, errors);
+                {
+                    errors.Add($"Возраст должен быть от {ValidationConstants.MinStudentAge}" +
+                        $" до {ValidationConstants.MaxStudentAge} лет");
+                }
+                   
+                return new StudentValidationResult(errors.Count == 0, errors);
             });
         }
 
         /// <summary>
         /// Проверяет, прошел ли студент по баллам асинхронно
         /// </summary>
-        public async Task<bool> IsStudentPassedAsync(Student student)
+        public bool IsStudentPassed(Student student)
         {
-            return await Task.Run(() =>
-                student.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
+            return student.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints;
         }
     }
 }

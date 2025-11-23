@@ -10,57 +10,40 @@ namespace AdmissionCommittee
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Список студентов
-        /// </summary>
-        public readonly List<Student> items;
-
-        /// <summary>
         /// Источник данных для DataGridView
         /// </summary>
-        public readonly BindingSource bindingSource = new();
+        private readonly BindingSource bindingSource = new();
 
-        private readonly IStudentService iStudentService;
+        private readonly IStudentService studentService;
 
         /// <summary>
         /// Конструктор главной формы
         /// </summary>
         public MainForm(IStudentService studentService)
         {
-            items = new List<Student>();
-            items.Add(new Student()
-            {
-                Id = Guid.NewGuid(),
-                FullName = "Тест Тест Тест",
-                Gender = Gender.Male,
-                Birthday = new DateTime(2002, 11, 11),
-                EducationalForm = EducationalForm.FullTime,
-                MathScores = 85f,
-                PointsInRussianLanguage = 80f,
-                ComputerScienceScores = 70f,
-            });
-            items.Add(new Student()
-            {
-                Id = Guid.NewGuid(),
-                FullName = "Тест2 Тест2 Тест2",
-                Gender = Gender.Male,
-                Birthday = new DateTime(2003, 11, 12),
-                EducationalForm = EducationalForm.FullTime,
-                MathScores = 15f,
-                PointsInRussianLanguage = 40f,
-                ComputerScienceScores = 30f,
-            });
-            iStudentService = studentService;
+            this.studentService = studentService;
+
             InitializeComponent();
 
-            var students = iStudentService.GetAllStudentsAsync();
-
-            SetStatistic();
-
-            StudentDataGridView.AutoGenerateColumns = false;
-            bindingSource.DataSource = items;
-            StudentDataGridView.DataSource = bindingSource;
-
+            InitializeDataAsync();
             ConfigureDataGridViewColumns();
+        }
+
+        private async void InitializeDataAsync()
+        {
+            try
+            {
+                var students = await studentService.GetAllStudentsAsync();
+                bindingSource.DataSource = students;
+                StudentDataGridView.DataSource = bindingSource;
+
+                await SetStatisticAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void StudentDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -155,19 +138,26 @@ namespace AdmissionCommittee
             e.Handled = true;
         }
 
-        private void AddButton_Click(object sender, EventArgs e)
+        private async void AddButton_Click(object sender, EventArgs e)
         {
             var applicants = new ApplicantsForm();
 
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
-                items.Add(applicants.CurrentStudent);
-
-                OnUpdate();
+                try
+                {
+                    await studentService.AddStudentAsync(applicants.CurrentStudent);
+                    await LoadDataAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка добавления студента: {ex.Message}", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void EditButton_Click(object sender, EventArgs e)
+        private async void EditButton_Click(object sender, EventArgs e)
         {
             if (StudentDataGridView.SelectedRows.Count == 0)
             {
@@ -179,24 +169,20 @@ namespace AdmissionCommittee
 
             if (applicants.ShowDialog(this) == DialogResult.OK)
             {
-                var target = items.FirstOrDefault(x => x.Id == applicants.CurrentStudent.Id);
-
-                if (target != null)
+                try
                 {
-                    target.FullName = applicants.CurrentStudent.FullName;
-                    target.Gender = applicants.CurrentStudent.Gender;
-                    target.Birthday = applicants.CurrentStudent.Birthday;
-                    target.EducationalForm = applicants.CurrentStudent.EducationalForm;
-                    target.MathScores = applicants.CurrentStudent.MathScores;
-                    target.PointsInRussianLanguage = applicants.CurrentStudent.PointsInRussianLanguage;
-                    target.ComputerScienceScores = applicants.CurrentStudent.ComputerScienceScores;
-
-                    OnUpdate();
+                    await studentService.UpdateStudentAsync(applicants.CurrentStudent);
+                    await LoadDataAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка обновления студента: {ex.Message}", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void DeleteButton_Click(object sender, EventArgs e)
+        private async void DeleteButton_Click(object sender, EventArgs e)
         {
             if (StudentDataGridView.SelectedRows.Count == 0)
             {
@@ -204,27 +190,44 @@ namespace AdmissionCommittee
             }
 
             var student = (Student)StudentDataGridView.SelectedRows[0].DataBoundItem;
-            var target = items.FirstOrDefault(x => x.Id == student.Id);
+            var message = MessageBox.Show($"Вы действительно желаете удалить '{student.FullName}' ?", "Удаление студента", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (target != null &&
-                MessageBox.Show($"Вы действительно желаете удалить '{target.FullName}' ?", "Удаление студента", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (message == DialogResult.Yes)
             {
-                items.Remove(target);
-
-                OnUpdate();
+                try
+                {
+                    await studentService.DeleteStudentAsync(student.Id);
+                    await LoadDataAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка удаления студента: {ex.Message}", "Ошибка",
+                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void OnUpdate()
+        private async Task LoadDataAsync()
         {
+            var students = await studentService.GetAllStudentsAsync();
+            bindingSource.DataSource = students;
             bindingSource.ResetBindings(false);
-            SetStatistic();
+            await SetStatisticAsync();
         }
 
-        private void SetStatistic()
+        private async Task SetStatisticAsync()
         {
-            NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {items.Count}";
-            ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {ValidationConstants.RequiredNumberOfPoints} баллов: " + $"{items.Count(x => x.TotalAmountOfPoints > ValidationConstants.RequiredNumberOfPoints)}";
+            try
+            {
+                var stats = await studentService.GetStatisticsAsync();
+                NumberOfApplicantsStatusLabel.Text = $"Количество абитуриентов: {stats.TotalCount}";
+                ScoreEnoughPointsStatusLabel.Text = $"Набрали больше {ValidationConstants.RequiredNumberOfPoints} баллов: {stats.PassedCount}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки статистики: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ConfigureDataGridViewColumns()

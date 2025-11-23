@@ -1,5 +1,6 @@
 ﻿using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Models;
+using AdmissionCommittee.Services.Contracts;
 
 namespace AdmissionCommittee.Services
 {
@@ -9,6 +10,40 @@ namespace AdmissionCommittee.Services
     public class StudentService : IStudentService
     {
         private readonly List<Student> students = new();
+
+        /// <summary>
+        /// Инициализируем тестовые данные
+        /// </summary>
+        public StudentService()
+        {
+            InitializeTestData();
+        }
+
+        private void InitializeTestData()
+        {
+            students.Add(new Student()
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Тест Тест Тест",
+                Gender = Gender.Male,
+                Birthday = new DateTime(2002, 11, 11),
+                EducationalForm = EducationalForm.FullTime,
+                MathScores = 85f,
+                PointsInRussianLanguage = 80f,
+                ComputerScienceScores = 70f,
+            });
+            students.Add(new Student()
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Тест2 Тест2 Тест2",
+                Gender = Gender.Male,
+                Birthday = new DateTime(2003, 11, 12),
+                EducationalForm = EducationalForm.FullTime,
+                MathScores = 15f,
+                PointsInRussianLanguage = 40f,
+                ComputerScienceScores = 30f,
+            });
+        }
 
         /// <summary>
         /// Получает список всех студентов асинхронно
@@ -59,20 +94,22 @@ namespace AdmissionCommittee.Services
             {
                 var student = students.FirstOrDefault(s => s.Id == id);
                 if (student != null)
+                {
                     students.Remove(student);
+                }
             });
         }
 
         /// <summary>
         /// Получает статистику по студентам асинхронно
         /// </summary>
-        public async Task<(int totalCount, int passedCount)> GetStatisticsAsync()
+        public async Task<StatisticsResult> GetStatisticsAsync()
         {
             return await Task.Run(() =>
             {
                 var total = students.Count;
                 var passed = students.Count(s => s.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
-                return (total, passed);
+                return new StatisticsResult(total, passed);
             });
         }
     }

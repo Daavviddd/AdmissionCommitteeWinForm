@@ -1,4 +1,5 @@
 ﻿using AdmissionCommittee.Models;
+using AdmissionCommittee.Services.Contracts;
 
 namespace AdmissionCommittee.Contracts
 {
@@ -35,6 +36,6 @@ namespace AdmissionCommittee.Contracts
         /// <summary>
         /// Получает статистику по студентам асинхронно
         /// </summary>
-        Task<(int totalCount, int passedCount)> GetStatisticsAsync();
+        Task<StatisticsResult> GetStatisticsAsync();
     }
 }

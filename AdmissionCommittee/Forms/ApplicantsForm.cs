@@ -2,6 +2,7 @@
 using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Infrostructure;
 using AdmissionCommittee.Models;
+using AdmissionCommittee.Services;
 
 namespace AdmissionCommittee.Forms
 {
@@ -11,6 +12,8 @@ namespace AdmissionCommittee.Forms
     public partial class ApplicantsForm : Form
     {
         private readonly Student targetStudent;
+
+        private readonly IValidationService validationService;
 
         private readonly ErrorProvider errorProvider = new ErrorProvider();
 
@@ -22,9 +25,18 @@ namespace AdmissionCommittee.Forms
         /// <summary>
         /// Конструктор добавления и редактирования студента
         /// </summary>
-        public ApplicantsForm(Student? sourceStudent = null, IValidationService validationService = null)
+        public ApplicantsForm(Student? sourceStudent = null)
         {
             InitializeComponent();
+
+            if (validationService != null)
+            {
+                this.validationService = validationService;
+            }
+            else
+            {
+                this.validationService = new ValidationService();
+            }
 
             errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
 
@@ -37,6 +49,7 @@ namespace AdmissionCommittee.Forms
             {
                 targetStudent = new Student();
             }
+
             GenderComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             EducationFormComboBox.DrawMode = DrawMode.OwnerDrawFixed;
 

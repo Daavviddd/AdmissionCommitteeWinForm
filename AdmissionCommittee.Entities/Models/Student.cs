@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace AdmissionCommittee.Models
@@ -11,6 +12,7 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Id
         /// </summary>
+        [Browsable(false)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Дата рождения
         /// </summary>
+        [Browsable(false)]
         public DateTime Birthday { get; set; } = DateTime.Now;
 
         /// <summary>

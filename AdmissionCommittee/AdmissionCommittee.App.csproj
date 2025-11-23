@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.Services.Contracts.csproj" />
+    <ProjectReference Include="..\AdmissionCommittee.Services\AdmissionCommittee.Services.csproj" />
   </ItemGroup>
 
 </Project>

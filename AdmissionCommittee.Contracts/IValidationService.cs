@@ -1,4 +1,5 @@
 ﻿using AdmissionCommittee.Models;
+using AdmissionCommittee.Services.Contracts;
 
 namespace AdmissionCommittee.Contracts
 {
@@ -10,11 +11,11 @@ namespace AdmissionCommittee.Contracts
         /// <summary>
         /// Выполняет валидацию данных студента асинхронно
         /// </summary>
-        Task<(bool isValid, List<string> errors)> ValidateStudentAsync(Student student);
+        Task<StudentValidationResult> ValidateStudentAsync(Student student);
 
         /// <summary>
-        /// Проверяет, прошел ли студент по баллам асинхронно
+        /// Проверяет, прошел ли студент по баллам
         /// </summary>
-        Task<bool> IsStudentPassedAsync(Student student);
+        bool IsStudentPassed(Student student);
     }
 }
