@@ -34,6 +34,7 @@ namespace AdmissionCommittee
             try
             {
                 var students = await studentService.GetAllStudentsAsync();
+
                 bindingSource.DataSource = students;
                 StudentDataGridView.DataSource = bindingSource;
 

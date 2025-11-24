@@ -26,6 +26,7 @@
         public StudentValidationResult(bool isValid, List<string> errors)
         {
             IsValid = isValid;
+
             if (errors == null)
             {
                 Errors = new List<string>();

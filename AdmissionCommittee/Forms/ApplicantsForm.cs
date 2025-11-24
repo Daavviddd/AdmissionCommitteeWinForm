@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Infrostructure;
 using AdmissionCommittee.Models;
-using AdmissionCommittee.Services;
 
 namespace AdmissionCommittee.Forms
 {
@@ -12,8 +10,6 @@ namespace AdmissionCommittee.Forms
     public partial class ApplicantsForm : Form
     {
         private readonly Student targetStudent;
-
-        private readonly IValidationService validationService;
 
         private readonly ErrorProvider errorProvider = new ErrorProvider();
 
@@ -28,15 +24,6 @@ namespace AdmissionCommittee.Forms
         public ApplicantsForm(Student? sourceStudent = null)
         {
             InitializeComponent();
-
-            if (validationService != null)
-            {
-                this.validationService = validationService;
-            }
-            else
-            {
-                this.validationService = new ValidationService();
-            }
 
             errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
 
@@ -117,6 +104,7 @@ namespace AdmissionCommittee.Forms
                 if (value is Gender genderValue)
                 {
                     var valueString = string.Empty;
+
                     switch (genderValue)
                     {
                         case Gender.Male:
@@ -129,7 +117,9 @@ namespace AdmissionCommittee.Forms
                             valueString = "-";
                             break;
                     }
+
                     var brush = SystemBrushes.ControlText;
+
                     if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                     {
                         brush = SystemBrushes.HighlightText;

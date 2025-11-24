@@ -77,9 +77,11 @@ namespace AdmissionCommittee.Services
             await Task.Run(() =>
             {
                 var existing = students.FirstOrDefault(s => s.Id == student.Id);
+
                 if (existing != null)
                 {
                     var index = students.IndexOf(existing);
+
                     students[index] = student;
                 }
             });
@@ -93,6 +95,7 @@ namespace AdmissionCommittee.Services
             await Task.Run(() =>
             {
                 var student = students.FirstOrDefault(s => s.Id == id);
+
                 if (student != null)
                 {
                     students.Remove(student);
@@ -109,6 +112,7 @@ namespace AdmissionCommittee.Services
             {
                 var total = students.Count;
                 var passed = students.Count(s => s.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
+
                 return new StatisticsResult(total, passed);
             });
         }

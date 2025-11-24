@@ -29,6 +29,7 @@ namespace AdmissionCommittee.Services
                 }
 
                 var age = DateTime.Now.Year - student.Birthday.Year;
+
                 if (student.Birthday > DateTime.Now.AddYears(-age))
                 {
                     age--;
