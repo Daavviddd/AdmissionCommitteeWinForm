@@ -1,35 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace AdmissionCommittee.Models
 {
     /// <summary>
     /// Класс данных студента
     /// </summary>
-    public class StudentModel
+    public class Student
     {
         /// <summary>
         /// Id
         /// </summary>
+        [Browsable(false)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
         /// ФИО
         /// </summary>
         [Required(ErrorMessage = "Поле {0} обязательно для заполнения")]
-        [StringLength(NumbersForValidation.MaxFullNameSize, ErrorMessage = "Поле {0} должно содержать не более {1} символов")]
+        [StringLength(ValidationConstants.MaxFullNameSize, ErrorMessage = "Поле {0} должно содержать не более {1} символов")]
         public string FullName { get; set; } = string.Empty;
 
         /// <summary>
         /// Гендер
         /// </summary>
-        [Display(Name = "Пол")]
-        [Range(1, 2, ErrorMessage = "Поле '{0}' обязательно для выбора")]
         public Gender Gender { get; set; }
 
         /// <summary>
         /// Дата рождения
         /// </summary>
+        [Browsable(false)]
         public DateTime Birthday { get; set; } = DateTime.Now;
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace AdmissionCommittee.Models
         /// Баллы ЕГЭ по математике
         /// </summary>
         [Display(Name = "Баллы по математике")]
-        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxExamScore,
+        [Range(ValidationConstants.MinExamScore, ValidationConstants.MaxExamScore,
             ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float MathScores { get; set; }
 
@@ -49,7 +50,7 @@ namespace AdmissionCommittee.Models
         /// Баллы ЕГЭ по русскому языку
         /// </summary>
         [Display(Name = "Баллы по русскому языку")]
-        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxExamScore,
+        [Range(ValidationConstants.MinExamScore, ValidationConstants.MaxExamScore,
             ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float PointsInRussianLanguage { get; set; }
 
@@ -57,7 +58,7 @@ namespace AdmissionCommittee.Models
         /// Баллы ЕГЭ по информатике
         /// </summary>
         [Display(Name = "Баллы по информатике")]
-        [Range(NumbersForValidation.MinExamScore, NumbersForValidation.MaxExamScore,
+        [Range(ValidationConstants.MinExamScore, ValidationConstants.MaxExamScore,
             ErrorMessage = "Поле '{0}' должно быть в пределах от {1} до {2} баллов")]
         public float ComputerScienceScores { get; set; }
 
@@ -74,9 +75,9 @@ namespace AdmissionCommittee.Models
         /// <summary>
         /// Создает поверхностную копию объекта StudentModel
         /// </summary>
-        public StudentModel Clone()
+        public Student Clone()
         {
-            return (StudentModel)MemberwiseClone();
+            return (Student)MemberwiseClone();
         }
     }
 }

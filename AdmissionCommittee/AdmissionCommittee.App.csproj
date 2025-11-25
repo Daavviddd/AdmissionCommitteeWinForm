@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="David5_5David.AdmissionCommittee.Services" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.Services.Contracts.csproj" />
+    <ProjectReference Include="..\AdmissionCommittee.Services\AdmissionCommittee.Services.csproj" />
+  </ItemGroup>
+
+</Project>
