@@ -4,16 +4,24 @@ using AdmissionCommittee.Models;
 
 namespace AdmissionCommittee.Forms
 {
+    /// <summary>
+    /// Форма для добавления и редактирования данных абитуриента
+    /// </summary>
     public partial class ApplicantsForm : Form
     {
-        private readonly StudentModel targetStudent;
+        private readonly Student targetStudent;
 
         private readonly ErrorProvider errorProvider = new ErrorProvider();
 
         /// <summary>
+        /// Текущий абитуриент 
+        /// </summary>
+        public Student CurrentStudent => targetStudent;
+
+        /// <summary>
         /// Конструктор добавления и редактирования студента
         /// </summary>
-        public ApplicantsForm(StudentModel? sourceStudent = null)
+        public ApplicantsForm(Student? sourceStudent = null)
         {
             InitializeComponent();
 
@@ -26,8 +34,9 @@ namespace AdmissionCommittee.Forms
             }
             else
             {
-                targetStudent = new StudentModel();
+                targetStudent = new Student();
             }
+
             GenderComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             EducationFormComboBox.DrawMode = DrawMode.OwnerDrawFixed;
 
@@ -47,8 +56,8 @@ namespace AdmissionCommittee.Forms
 
             
 
-            BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-NumbersForValidation.MinStudentAge);
-            BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-NumbersForValidation.MaxStudentAge);
+            BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-ValidationConstants.MinStudentAge);
+            BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-ValidationConstants.MaxStudentAge);
 
             BirthdayDateTimePicker.AddBinding(x => x.Value, targetStudent, x => x.Birthday, errorProvider);
 
@@ -95,6 +104,7 @@ namespace AdmissionCommittee.Forms
                 if (value is Gender genderValue)
                 {
                     var valueString = string.Empty;
+
                     switch (genderValue)
                     {
                         case Gender.Male:
@@ -107,7 +117,9 @@ namespace AdmissionCommittee.Forms
                             valueString = "-";
                             break;
                     }
+
                     var brush = SystemBrushes.ControlText;
+
                     if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                     {
                         brush = SystemBrushes.HighlightText;
@@ -177,19 +189,19 @@ namespace AdmissionCommittee.Forms
                 {
                     switch (memberName)
                     {
-                        case nameof(StudentModel.FullName):
+                        case nameof(Student.FullName):
                             errorProvider.SetError(FullNameTextBox, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.Gender):
+                        case nameof(Student.Gender):
                             errorProvider.SetError(GenderComboBox, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.MathScores):
+                        case nameof(Student.MathScores):
                             errorProvider.SetError(MathNumericUpDown, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.PointsInRussianLanguage):
+                        case nameof(Student.PointsInRussianLanguage):
                             errorProvider.SetError(RussianNumericUpDown, validationResult.ErrorMessage);
                             break;
-                        case nameof(StudentModel.ComputerScienceScores):
+                        case nameof(Student.ComputerScienceScores):
                             errorProvider.SetError(ComputerNumericUpDown, validationResult.ErrorMessage);
                             break;
                     }
@@ -202,10 +214,6 @@ namespace AdmissionCommittee.Forms
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            else
-            {
-                var errorMessages = validationResults.Select(vr => vr.ErrorMessage);
-            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -217,12 +225,6 @@ namespace AdmissionCommittee.Forms
                 DialogResult = DialogResult.Cancel;
                 Close();
             }
-
         }
-
-        /// <summary>
-        /// Текущий абитуриент 
-        /// </summary>
-        public StudentModel CurrentStudent => targetStudent;
     }
 }

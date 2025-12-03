@@ -3,8 +3,14 @@ using System.Linq.Expressions;
 
 namespace AdmissionCommittee.Infrostructure
 {
+    /// <summary>
+    /// Предоставляет extension-методы для работы с data binding
+    /// </summary>
     public static class Extension
     {
+        /// <summary>
+        /// Создает двустороннюю привязку данных между свойством контрола и свойством источника данных
+        /// </summary>
         public static void AddBinding<TControl, TSourse>(this TControl control,
             Expression<Func<TControl, object>> destinationProperty,
             TSourse source,
@@ -20,23 +26,37 @@ namespace AdmissionCommittee.Infrostructure
 
             if (errorProvider != null)
             {
-                var context = new ValidationContext(source);
-                var results = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(source, context, results, true))
+                control.Validating += (sender, e) =>
                 {
-                    var propError = results.FirstOrDefault(x => x.MemberNames.Contains(sourceProName));
-                    if (propError != null)
+                    var context = new ValidationContext(source);
+                    var results = new List<ValidationResult>();
+
+                    context.MemberName = sourceProName;
+
+                    if (!Validator.TryValidateProperty(source.GetType().GetProperty(sourceProName)?.GetValue(source),
+                        context,
+                        results))
                     {
-                        errorProvider.SetError(control, "error");
+                        var error = results.FirstOrDefault()?.ErrorMessage ?? "Ошибка валидации";
+                        errorProvider.SetError(control, error);
+                        e.Cancel = false;
                     }
-                }
-                else
+                    else
+                    {
+                        errorProvider.SetError(control, string.Empty);
+                    }
+                };
+
+                control.TextChanged += (sender, e) =>
                 {
                     errorProvider.SetError(control, string.Empty);
-                }
+                };
             }
         }
 
+        /// <summary>
+        /// Извлекает имя свойства из expression tree
+        /// </summary>
         static string GetPropertyName<TType>(Expression<Func<TType, object>> expression)
         {
             Expression body = expression.Body;
