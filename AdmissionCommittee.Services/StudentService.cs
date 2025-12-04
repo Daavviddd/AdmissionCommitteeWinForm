@@ -1,6 +1,9 @@
-﻿using AdmissionCommittee.Contracts;
+﻿using System.Diagnostics;
+using AdmissionCommittee.Contracts;
 using AdmissionCommittee.Models;
 using AdmissionCommittee.Services.Contracts;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace AdmissionCommittee.Services
 {
@@ -50,7 +53,19 @@ namespace AdmissionCommittee.Services
         /// </summary>
         public async Task<List<Student>> GetAllStudentsAsync()
         {
-            return await Task.Run(() => students.ToList());
+            var stopWatch = Stopwatch.StartNew();
+            try
+            {
+                var result = await Task.Run(() => students.ToList());
+                return result;
+            }
+            finally
+            {
+                stopWatch.Stop();
+                var ms = stopWatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
+                Log.Debug("Время выполнения GetAllStudentsAsync: {ms:F6} мс", ms);
+            }
+
         }
 
         /// <summary>
@@ -58,7 +73,18 @@ namespace AdmissionCommittee.Services
         /// </summary>
         public async Task<Student?> GetStudentByIdAsync(Guid id)
         {
-            return await Task.Run(() => students.FirstOrDefault(s => s.Id == id));
+            var stopWatch = Stopwatch.StartNew();
+            try
+            {
+                var result = await Task.Run(() => students.FirstOrDefault(s => s.Id == id));
+                return result;
+            }
+            finally
+            {
+                stopWatch.Stop();
+                var ms = stopWatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
+                Log.Debug("Время выполнения GetStudentByIdAsync: {ms:F6} мс", ms);
+            }
         }
 
         /// <summary>
@@ -66,7 +92,17 @@ namespace AdmissionCommittee.Services
         /// </summary>
         public async Task AddStudentAsync(Student student)
         {
-            await Task.Run(() => students.Add(student));
+            var stopWatch = Stopwatch.StartNew();
+            try
+            {
+                await Task.Run(() => students.Add(student));
+            }
+            finally
+            {
+                stopWatch.Stop();
+                var ms = stopWatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
+                Log.Debug("Время выполнения AddStudentAsync: {ms:F6} мс", ms);
+            }
         }
 
         /// <summary>
@@ -74,17 +110,27 @@ namespace AdmissionCommittee.Services
         /// </summary>
         public async Task UpdateStudentAsync(Student student)
         {
-            await Task.Run(() =>
+            var stopWatch = Stopwatch.StartNew();
+            try
             {
-                var existing = students.FirstOrDefault(s => s.Id == student.Id);
-
-                if (existing != null)
+                await Task.Run(() =>
                 {
-                    var index = students.IndexOf(existing);
+                    var existing = students.FirstOrDefault(s => s.Id == student.Id);
 
-                    students[index] = student;
-                }
-            });
+                    if (existing != null)
+                    {
+                        var index = students.IndexOf(existing);
+
+                        students[index] = student;
+                    }
+                });
+            }
+            finally
+            {
+                stopWatch.Stop();
+                var ms = stopWatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
+                Log.Debug("Время выполнения UpdateStudentAsync: {ms:F6} мс", ms);
+            }
         }
 
         /// <summary>
@@ -92,15 +138,25 @@ namespace AdmissionCommittee.Services
         /// </summary>
         public async Task DeleteStudentAsync(Guid id)
         {
-            await Task.Run(() =>
+            var stopWatch = Stopwatch.StartNew();
+            try
             {
-                var student = students.FirstOrDefault(s => s.Id == id);
-
-                if (student != null)
+                await Task.Run(() =>
                 {
-                    students.Remove(student);
-                }
-            });
+                    var student = students.FirstOrDefault(s => s.Id == id);
+
+                    if (student != null)
+                    {
+                        students.Remove(student);
+                    }
+                });
+            }
+            finally
+            {
+                stopWatch.Stop();
+                var ms = stopWatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
+                Log.Debug("Время выполнения DeleteStudentAsync: {ms:F6} мс", ms);
+            }
         }
 
         /// <summary>
@@ -108,13 +164,24 @@ namespace AdmissionCommittee.Services
         /// </summary>
         public async Task<StatisticsResult> GetStatisticsAsync()
         {
-            return await Task.Run(() =>
+            var stopWatch = Stopwatch.StartNew();
+            try
             {
-                var total = students.Count;
-                var passed = students.Count(s => s.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
+                var result = await Task.Run(() =>
+                {
+                    var total = students.Count;
+                    var passed = students.Count(s => s.TotalAmountOfPoints >= ValidationConstants.RequiredNumberOfPoints);
 
-                return new StatisticsResult(total, passed);
-            });
+                    return new StatisticsResult(total, passed);
+                });
+                return result;
+            }
+            finally
+            {
+                stopWatch.Stop();
+                var ms = stopWatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
+                Log.Debug("Время выполнения GetStatisticsAsync: {ms:F6} мс", ms);
+            }
         }
     }
 }
