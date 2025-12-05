@@ -22,8 +22,10 @@
 	</ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.Services.Contracts.csproj" />
+	  <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.MemoryStorage.Contracts.csproj" />
 	  <ProjectReference Include="..\AdmissionCommittee.Entities.Constants\AdmissionCommittee.Entities.Constants.csproj" />
+	  <ProjectReference Include="..\AdmissionCommittee.Entities\AdmissionCommittee.Entities.csproj" />
+	  <ProjectReference Include="..\AdmissionCommittee.Manager.Contracts\AdmissionCommittee.Manager.Contracts.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
