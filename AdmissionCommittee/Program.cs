@@ -21,6 +21,8 @@ namespace AdmissionCommittee
                 .WriteTo.File("logs/log-.txt",
                     rollingInterval: RollingInterval.Day,
                     outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.Seq("http://localhost:5341",
+                    apiKey: "HSCK1jhU59ROAkmSMRTL")
                 .CreateLogger();
 
             using var loggerFactory = LoggerFactory.Create(builder =>
