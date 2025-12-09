@@ -1,4 +1,4 @@
-﻿namespace AdmissionCommittee.Manager.Contracts
+﻿namespace AdmissionCommittee.MemoryStorage.Contracts
 {
     /// <summary>
     /// Результат статистики по студентам

@@ -1,5 +1,4 @@
-﻿using AdmissionCommittee.Manager.Contracts;
-using AdmissionCommittee.Models;
+﻿using AdmissionCommittee.Models;
 
 namespace AdmissionCommittee.MemoryStorage.Contracts
 {

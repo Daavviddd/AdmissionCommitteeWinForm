@@ -57,6 +57,7 @@ namespace AdmissionCommittee.Manager
         async Task IStudentsManager.UpdateStudentAsync(Student student)
         {
             var sw = Stopwatch.StartNew();
+
             try
             {
                 await studentService.UpdateStudentAsync(student);
@@ -72,6 +73,7 @@ namespace AdmissionCommittee.Manager
         async Task IStudentsManager.DeleteStudentAsync(Guid id)
         {
             var sw = Stopwatch.StartNew();
+
             try
             {
                 await studentService.DeleteStudentAsync(id);
@@ -87,9 +89,11 @@ namespace AdmissionCommittee.Manager
         async Task<Student?> IStudentsManager.GetStudentByIdAsync(Guid id)
         {
             var sw = Stopwatch.StartNew();
+
             try
             {
                 var result = await studentService.GetStudentByIdAsync(id);
+
                 return result;
             }
             finally
@@ -103,9 +107,11 @@ namespace AdmissionCommittee.Manager
         async Task<StatisticsResult> IStudentsManager.GetStatisticsAsync()
         {
             var sw = Stopwatch.StartNew();
+
             try
             {
                 var result = await studentService.GetStatisticsAsync();
+
                 return result;
             }
             finally

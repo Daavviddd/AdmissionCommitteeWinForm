@@ -1,4 +1,4 @@
-using AdmissionCommittee.Manager.Contracts;
+п»їusing AdmissionCommittee.Manager.Contracts;
 using AdmissionCommittee.MemoryStorage.Contracts;
 using AdmissionCommittee.Models;
 using Ahatornn.TestGenerator;
@@ -9,21 +9,20 @@ using Moq;
 namespace AdmissionCommittee.Manager.Tests
 {
     /// <summary>
-    /// Набор модульных тестов для проверки работы класса <see cref="StudentsManager"/>
+    /// РќР°Р±РѕСЂ РјРѕРґСѓР»СЊРЅС‹С… С‚РµСЃС‚РѕРІ РґР»СЏ РїСЂРѕРІРµСЂРєРё СЂР°Р±РѕС‚С‹ РєР»Р°СЃСЃР° <see cref="StudentsManager"/>
     /// </summary>
     public class StudentManagerTests
     {
         private readonly IStudentsManager studentsManager;
         private readonly Mock<IStudentStorage> storageMock;
-        private readonly Mock<ILogger> loggerMock;
 
         /// <summary>
-        /// Инициализирует экземпляр <see cref="StudentsManagerTests"/>
+        /// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ СЌРєР·РµРјРїР»СЏСЂ <see cref="StudentsManagerTests"/>
         /// </summary>
         public StudentManagerTests()
         {
             storageMock = new Mock<IStudentStorage>();
-            loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<ILogger<StudentsManager>>();
 
             var mockLoggerFactory = new Mock<ILoggerFactory>();
             mockLoggerFactory
@@ -34,7 +33,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод получения всех студентов возвращает корректную коллекцию
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ РІСЃРµС… СЃС‚СѓРґРµРЅС‚РѕРІ РІРѕР·РІСЂР°С‰Р°РµС‚ РєРѕСЂСЂРµРєС‚РЅСѓСЋ РєРѕР»Р»РµРєС†РёСЋ
         /// </summary>
         [Fact]
         public async Task GetAllStudentsAsyncShouldReturnAllStudents()
@@ -53,7 +52,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод получения студента по ID возвращает корректного студента
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ СЃС‚СѓРґРµРЅС‚Р° РїРѕ ID РІРѕР·РІСЂР°С‰Р°РµС‚ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ СЃС‚СѓРґРµРЅС‚Р°
         /// </summary>
         [Fact]
         public async Task GetStudentByIdAsyncShouldReturnStudent()
@@ -70,7 +69,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод получения студента по ID возвращает null при отсутствии студента
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ СЃС‚СѓРґРµРЅС‚Р° РїРѕ ID РІРѕР·РІСЂР°С‰Р°РµС‚ null РїСЂРё РѕС‚СЃСѓС‚СЃС‚РІРёРё СЃС‚СѓРґРµРЅС‚Р°
         /// </summary>
         [Fact]
         public async Task GetStudentByIdAsyncShouldReturnNull()
@@ -87,7 +86,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод добавления студента вызывает хранилище
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РґРѕР±Р°РІР»РµРЅРёСЏ СЃС‚СѓРґРµРЅС‚Р° РІС‹Р·С‹РІР°РµС‚ С…СЂР°РЅРёР»РёС‰Рµ
         /// </summary>
         [Fact]
         public async Task AddStudentAsyncShouldCallStorage()
@@ -104,7 +103,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод обновления студента вызывает хранилище
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РѕР±РЅРѕРІР»РµРЅРёСЏ СЃС‚СѓРґРµРЅС‚Р° РІС‹Р·С‹РІР°РµС‚ С…СЂР°РЅРёР»РёС‰Рµ
         /// </summary>
         [Fact]
         public async Task UpdateStudentAsyncShouldCallStorage()
@@ -121,7 +120,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод удаления студента вызывает хранилище
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ СѓРґР°Р»РµРЅРёСЏ СЃС‚СѓРґРµРЅС‚Р° РІС‹Р·С‹РІР°РµС‚ С…СЂР°РЅРёР»РёС‰Рµ
         /// </summary>
         [Fact]
         public async Task DeleteStudentAsyncShouldCallStorage()
@@ -138,12 +137,12 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод получения статистики корректно вычисляет показатели
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ СЃС‚Р°С‚РёСЃС‚РёРєРё РєРѕСЂСЂРµРєС‚РЅРѕ РІС‹С‡РёСЃР»СЏРµС‚ РїРѕРєР°Р·Р°С‚РµР»Рё
         /// </summary>
         [Fact]
         public async Task GetStatisticsAsyncShouldReturnCorrectStatistics()
         {
-            var expectedStatistics = new StatisticsResult(3, 2); // 3 всего студентов, 2 прошли
+            var expectedStatistics = new StatisticsResult(3, 2); // 3 РІСЃРµРіРѕ СЃС‚СѓРґРµРЅС‚РѕРІ, 2 РїСЂРѕС€Р»Рё
 
             storageMock.Setup(x => x.GetStatisticsAsync()).ReturnsAsync(expectedStatistics);
 
@@ -160,7 +159,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод получения статистики корректно работает с пустым списком
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ СЃС‚Р°С‚РёСЃС‚РёРєРё РєРѕСЂСЂРµРєС‚РЅРѕ СЂР°Р±РѕС‚Р°РµС‚ СЃ РїСѓСЃС‚С‹Рј СЃРїРёСЃРєРѕРј
         /// </summary>
         [Fact]
         public async Task GetStatisticsAsyncShouldReturnZeroStatistics()
@@ -182,7 +181,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что конструктор выбрасывает исключение при null фабрике логгера
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РІС‹Р±СЂР°СЃС‹РІР°РµС‚ РёСЃРєР»СЋС‡РµРЅРёРµ РїСЂРё null С„Р°Р±СЂРёРєРµ Р»РѕРіРіРµСЂР°
         /// </summary>
         [Fact]
         public void ConstructorShouldThrowArgumentNullException()
@@ -195,7 +194,7 @@ namespace AdmissionCommittee.Manager.Tests
         }
 
         /// <summary>
-        /// Проверяет, что метод получения статистики корректно считает количество студентов и проходные баллы
+        /// РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РјРµС‚РѕРґ РїРѕР»СѓС‡РµРЅРёСЏ СЃС‚Р°С‚РёСЃС‚РёРєРё РєРѕСЂСЂРµРєС‚РЅРѕ СЃС‡РёС‚Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СѓРґРµРЅС‚РѕРІ Рё РїСЂРѕС…РѕРґРЅС‹Рµ Р±Р°Р»Р»С‹
         /// </summary>
         [Fact]
         public async Task GetStatisticsAsyncShouldCalculateCorrectly()

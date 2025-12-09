@@ -10,7 +10,6 @@ namespace AdmissionCommittee.Forms
     public partial class ApplicantsForm : Form
     {
         private readonly Student targetStudent;
-
         private readonly ErrorProvider errorProvider = new ErrorProvider();
 
         /// <summary>
@@ -53,8 +52,6 @@ namespace AdmissionCommittee.Forms
                 GenderComboBox.SelectedItem = Gender.Male;
                 EducationFormComboBox.SelectedItem = EducationalForm.FullTime;
             }
-
-            
 
             BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-ValidationConstants.MinStudentAge);
             BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-ValidationConstants.MaxStudentAge);
