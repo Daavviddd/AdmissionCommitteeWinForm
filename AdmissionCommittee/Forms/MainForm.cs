@@ -1,5 +1,5 @@
-﻿using AdmissionCommittee.Contracts;
-using AdmissionCommittee.Forms;
+﻿using AdmissionCommittee.Forms;
+using AdmissionCommittee.Manager.Contracts;
 using AdmissionCommittee.Models;
 
 namespace AdmissionCommittee
@@ -14,12 +14,12 @@ namespace AdmissionCommittee
         /// </summary>
         private readonly BindingSource bindingSource = new();
 
-        private readonly IStudentService studentService;
+        private readonly IStudentsManager studentService;
 
         /// <summary>
         /// Конструктор главной формы
         /// </summary>
-        public MainForm(IStudentService studentService)
+        public MainForm(IStudentsManager studentService)
         {
             this.studentService = studentService;
 
@@ -36,6 +36,7 @@ namespace AdmissionCommittee
                 var students = await studentService.GetAllStudentsAsync();
 
                 bindingSource.DataSource = students;
+                StudentDataGridView.AutoGenerateColumns = false;
                 StudentDataGridView.DataSource = bindingSource;
 
                 await SetStatisticAsync();

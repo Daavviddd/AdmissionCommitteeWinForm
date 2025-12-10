@@ -1,12 +1,11 @@
 ﻿using AdmissionCommittee.Models;
-using AdmissionCommittee.Services.Contracts;
 
-namespace AdmissionCommittee.Contracts
+namespace AdmissionCommittee.MemoryStorage.Contracts
 {
     /// <summary>
     /// Интерфейс сервиса для управления студентами
     /// </summary>
-    public interface IStudentService
+    public interface IStudentStorage
     {
         /// <summary>
         /// Получает список всех студентов асинхронно

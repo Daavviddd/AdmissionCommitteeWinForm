@@ -10,7 +10,6 @@ namespace AdmissionCommittee.Forms
     public partial class ApplicantsForm : Form
     {
         private readonly Student targetStudent;
-
         private readonly ErrorProvider errorProvider = new ErrorProvider();
 
         /// <summary>
@@ -54,14 +53,11 @@ namespace AdmissionCommittee.Forms
                 EducationFormComboBox.SelectedItem = EducationalForm.FullTime;
             }
 
-            
-
             BirthdayDateTimePicker.MaxDate = DateTime.Now.AddYears(-ValidationConstants.MinStudentAge);
             BirthdayDateTimePicker.MinDate = DateTime.Now.AddYears(-ValidationConstants.MaxStudentAge);
 
             BirthdayDateTimePicker.AddBinding(x => x.Value, targetStudent, x => x.Birthday, errorProvider);
 
-            FullNameTextBox.AddBinding(x => x.Text, targetStudent, x => x.FullName, errorProvider);
             GenderComboBox.AddBinding(x => x.SelectedValue!, targetStudent, x => x.Gender, errorProvider);
             EducationFormComboBox.AddBinding(x => x.SelectedValue!, targetStudent, x => x.EducationalForm, errorProvider);
             MathNumericUpDown.AddBinding(x => x.Value, targetStudent, x => x.MathScores, errorProvider);
@@ -71,6 +67,11 @@ namespace AdmissionCommittee.Forms
             MathNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
             RussianNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
             ComputerNumericUpDown.ValueChanged += NumericUpDown_ValueChanged!;
+
+            FullNameTextBox.TextChanged += (sender, e) =>
+            {
+                errorProvider.SetError(FullNameTextBox, "");
+            };
 
             UpdateTotalPoints();
 
@@ -178,6 +179,8 @@ namespace AdmissionCommittee.Forms
         private void btnSave_Click(object sender, EventArgs e)
         {
             errorProvider.Clear();
+
+            targetStudent.FullName = FullNameTextBox.Text;
 
             var validationContext = new ValidationContext(targetStudent);
             var validationResults = new List<ValidationResult>();
