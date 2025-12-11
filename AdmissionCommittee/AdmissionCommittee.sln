@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdmissionCommittee.Manager.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdmissionCommittee.Manager.Tests", "..\AdmissionCommittee.Manager.Tests\AdmissionCommittee.Manager.Tests.csproj", "{4BEED7F3-3792-4C19-B257-6D3285671450}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdmissionCommittee.DataBaseStorage", "..\AdmissionCommittee.DataBaseStorage\AdmissionCommittee.DataBaseStorage.csproj", "{4ADEC135-E227-438A-8836-DCB1A591614D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{4BEED7F3-3792-4C19-B257-6D3285671450}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BEED7F3-3792-4C19-B257-6D3285671450}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BEED7F3-3792-4C19-B257-6D3285671450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ADEC135-E227-438A-8836-DCB1A591614D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ADEC135-E227-438A-8836-DCB1A591614D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ADEC135-E227-438A-8836-DCB1A591614D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ADEC135-E227-438A-8836-DCB1A591614D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{7D7D607F-59A0-448F-8610-4A440514EA3D} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{F1787677-D159-4555-B70A-AE3C43106819} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{4BEED7F3-3792-4C19-B257-6D3285671450} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{4ADEC135-E227-438A-8836-DCB1A591614D} = {32665BB4-CD5D-4E08-BDCE-86AF48F01191}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB645BA7-7A53-498B-AA8C-4BA728DAF00D}

@@ -30,6 +30,8 @@ namespace AdmissionCommittee.Forms
             {
                 targetStudent = sourceStudent.Clone();
                 btnSave.Text = "Сохранить";
+
+                FullNameTextBox.Text = sourceStudent.FullName;
             }
             else
             {
