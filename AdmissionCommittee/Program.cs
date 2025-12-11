@@ -1,3 +1,4 @@
+using AdmissionCommittee.DataBaseStorage;
 using AdmissionCommittee.Manager;
 using AdmissionCommittee.Manager.Contracts;
 using AdmissionCommittee.Services;
@@ -30,7 +31,7 @@ namespace AdmissionCommittee
                 builder.AddSerilog(log);
             });
 
-            var studentStorage = new StudentMemoryStorage();
+            var studentStorage = new AdmissionCommitteeStorage();
             var studentManager = new StudentsManager(studentStorage, loggerFactory);
 
             ApplicationConfiguration.Initialize();

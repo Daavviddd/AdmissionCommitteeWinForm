@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdmissionCommittee.Contracts\AdmissionCommittee.MemoryStorage.Contracts.csproj" />
+    <ProjectReference Include="..\AdmissionCommittee.DataBaseStorage\AdmissionCommittee.DataBaseStorage.csproj" />
     <ProjectReference Include="..\AdmissionCommittee.Manager.Contracts\AdmissionCommittee.Manager.Contracts.csproj" />
     <ProjectReference Include="..\AdmissionCommittee.Manager\AdmissionCommittee.Manager.csproj" />
     <ProjectReference Include="..\AdmissionCommittee.Services\AdmissionCommittee.MemoryStorage.csproj" />
