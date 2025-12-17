@@ -1,7 +1,14 @@
+using AdmissionCommittee.DataBaseStorage;
+using AdmissionCommittee.Manager;
+using AdmissionCommittee.Manager.Contracts;
+using AdmissionCommittee.MemoryStorage.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IStudentsManager, StudentsManager>();
+builder.Services.AddScoped<IStudentStorage, AdmissionCommitteeStorage>();
 
 var app = builder.Build();
 
