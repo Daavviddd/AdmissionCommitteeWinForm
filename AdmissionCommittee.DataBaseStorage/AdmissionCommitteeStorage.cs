@@ -15,7 +15,7 @@ namespace AdmissionCommittee.DataBaseStorage
         public async Task<List<Student>> GetAllStudentsAsync(CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
-            return await database.Students.AsNoTracking().ToListAsync();
+            return await database.Students.AsNoTracking().ToListAsync(cancellationToken);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace AdmissionCommittee.DataBaseStorage
         {
             using var database = new AdmissionCommitteeContext();
             database.Students.Add(student);
-            await database.SaveChangesAsync();
+            await database.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace AdmissionCommittee.DataBaseStorage
         {
             using var database = new AdmissionCommitteeContext();
             database.Students.Update(student);
-            await database.SaveChangesAsync();
+            await database.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
@@ -44,11 +44,12 @@ namespace AdmissionCommittee.DataBaseStorage
         public async Task DeleteStudentAsync(Guid id, CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
-            var student = await database.Students.FindAsync(id);
+            var student = await database.Students.FindAsync(id, cancellationToken);
+
             if (student != null)
             {
                 database.Students.Remove(student);
-                await database.SaveChangesAsync();
+                await database.SaveChangesAsync(cancellationToken);
             }
         }
 
@@ -60,7 +61,7 @@ namespace AdmissionCommittee.DataBaseStorage
             using var database = new AdmissionCommitteeContext();
             return await database.Students
                 .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace AdmissionCommittee.DataBaseStorage
 
             var allStudents = await database.Students
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var totalCount = allStudents.Count;
             var passedCount = allStudents
