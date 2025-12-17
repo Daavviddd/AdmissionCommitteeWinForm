@@ -23,12 +23,12 @@ namespace AdmissionCommittee.Manager
             logger = loggerFactory.CreateLogger<StudentsManager>();
         }
 
-        async Task<List<Student>> IStudentsManager.GetAllStudentsAsync()
+        async Task<List<Student>> IStudentsManager.GetAllStudentsAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
             try
             {
-                var result = await studentService.GetAllStudentsAsync();
+                var result = await studentService.GetAllStudentsAsync(cancellationToken);
                 return result;
             }
             finally
@@ -39,12 +39,12 @@ namespace AdmissionCommittee.Manager
             }
         }
 
-        async Task IStudentsManager.AddStudentAsync(Student student)
+        async Task IStudentsManager.AddStudentAsync(Student student, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
             try
             {
-                await studentService.AddStudentAsync(student);
+                await studentService.AddStudentAsync(student, cancellationToken);
             }
             finally
             {
@@ -54,13 +54,13 @@ namespace AdmissionCommittee.Manager
             }
         }
 
-        async Task IStudentsManager.UpdateStudentAsync(Student student)
+        async Task IStudentsManager.UpdateStudentAsync(Student student, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
             try
             {
-                await studentService.UpdateStudentAsync(student);
+                await studentService.UpdateStudentAsync(student, cancellationToken);
             }
             finally
             {
@@ -70,13 +70,20 @@ namespace AdmissionCommittee.Manager
             }
         }
 
-        async Task IStudentsManager.DeleteStudentAsync(Guid id)
+        async Task<Student?> IStudentsManager.DeleteStudentAsync(Guid id, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
             try
             {
-                await studentService.DeleteStudentAsync(id);
+                var student = await studentService.GetStudentByIdAsync(id, cancellationToken);
+
+                if (student != null)
+                {
+                    await studentService.DeleteStudentAsync(id, cancellationToken);
+                }
+
+                return student;
             }
             finally
             {
@@ -86,13 +93,13 @@ namespace AdmissionCommittee.Manager
             }
         }
 
-        async Task<Student?> IStudentsManager.GetStudentByIdAsync(Guid id)
+        async Task<Student?> IStudentsManager.GetStudentByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
             try
             {
-                var result = await studentService.GetStudentByIdAsync(id);
+                var result = await studentService.GetStudentByIdAsync(id, cancellationToken);
 
                 return result;
             }
@@ -104,13 +111,13 @@ namespace AdmissionCommittee.Manager
             }
         }
 
-        async Task<StatisticsResult> IStudentsManager.GetStatisticsAsync()
+        async Task<StatisticsResult> IStudentsManager.GetStatisticsAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
             try
             {
-                var result = await studentService.GetStatisticsAsync();
+                var result = await studentService.GetStatisticsAsync(cancellationToken);
 
                 return result;
             }

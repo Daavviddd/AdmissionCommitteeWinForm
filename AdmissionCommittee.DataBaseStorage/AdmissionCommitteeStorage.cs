@@ -12,67 +12,68 @@ namespace AdmissionCommittee.DataBaseStorage
         /// <summary>
         /// Получить всех студентов
         /// </summary>
-        public async Task<List<Student>> GetAllStudentsAsync()
+        public async Task<List<Student>> GetAllStudentsAsync(CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
-            return await database.Students.AsNoTracking().ToListAsync();
+            return await database.Students.AsNoTracking().ToListAsync(cancellationToken);
         }
 
         /// <summary>
         /// Добавить нового студента
         /// </summary>
-        public async Task AddStudentAsync(Student student)
+        public async Task AddStudentAsync(Student student, CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
             database.Students.Add(student);
-            await database.SaveChangesAsync();
+            await database.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Изменить данные студента
         /// </summary>
-        public async Task UpdateStudentAsync(Student student)
+        public async Task UpdateStudentAsync(Student student, CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
             database.Students.Update(student);
-            await database.SaveChangesAsync();
+            await database.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
         /// Удалить студента по Id
         /// </summary>
-        public async Task DeleteStudentAsync(Guid id)
+        public async Task DeleteStudentAsync(Guid id, CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
-            var student = await database.Students.FindAsync(id);
+            var student = await database.Students.FindAsync(id, cancellationToken);
+
             if (student != null)
             {
                 database.Students.Remove(student);
-                await database.SaveChangesAsync();
+                await database.SaveChangesAsync(cancellationToken);
             }
         }
 
         /// <summary>
         /// Получить студента по идентификатору
         /// </summary>
-        public async Task<Student?> GetStudentByIdAsync(Guid id)
+        public async Task<Student?> GetStudentByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
             return await database.Students
                 .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
         }
 
         /// <summary>
         /// Получить статистику по студентам
         /// </summary>
-        public async Task<StatisticsResult> GetStatisticsAsync()
+        public async Task<StatisticsResult> GetStatisticsAsync(CancellationToken cancellationToken)
         {
             using var database = new AdmissionCommitteeContext();
 
             var allStudents = await database.Students
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var totalCount = allStudents.Count;
             var passedCount = allStudents

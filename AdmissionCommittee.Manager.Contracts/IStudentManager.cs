@@ -11,31 +11,31 @@ namespace AdmissionCommittee.Manager.Contracts
         /// <summary>
         /// Получает список всех студентов асинхронно
         /// </summary>
-        Task<List<Student>> GetAllStudentsAsync();
+        Task<List<Student>> GetAllStudentsAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Получает студента по идентификатору асинхронно
         /// </summary>
-        Task<Student?> GetStudentByIdAsync(Guid id);
+        Task<Student?> GetStudentByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Добавляет нового студента асинхронно
         /// </summary>
-        Task AddStudentAsync(Student student);
+        Task AddStudentAsync(Student student, CancellationToken cancellationToken);
 
         /// <summary>
         /// Обновляет данные студента асинхронно
         /// </summary>
-        Task UpdateStudentAsync(Student student);
+        Task UpdateStudentAsync(Student student, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет студента по идентификатору асинхронно
         /// </summary>
-        Task DeleteStudentAsync(Guid id);
+        Task<Student?> DeleteStudentAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Получает статистику по студентам асинхронно
         /// </summary>
-        Task<StatisticsResult> GetStatisticsAsync();
+        Task<StatisticsResult> GetStatisticsAsync(CancellationToken cancellationToken);
     }
 }
