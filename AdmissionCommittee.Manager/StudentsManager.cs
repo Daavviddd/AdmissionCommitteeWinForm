@@ -28,7 +28,7 @@ namespace AdmissionCommittee.Manager
             var sw = Stopwatch.StartNew();
             try
             {
-                var result = await studentService.GetAllStudentsAsync();
+                var result = await studentService.GetAllStudentsAsync(cancellationToken);
                 return result;
             }
             finally
@@ -44,7 +44,7 @@ namespace AdmissionCommittee.Manager
             var sw = Stopwatch.StartNew();
             try
             {
-                await studentService.AddStudentAsync(student);
+                await studentService.AddStudentAsync(student, cancellationToken);
             }
             finally
             {
@@ -60,7 +60,7 @@ namespace AdmissionCommittee.Manager
 
             try
             {
-                await studentService.UpdateStudentAsync(student);
+                await studentService.UpdateStudentAsync(student, cancellationToken);
             }
             finally
             {
@@ -76,11 +76,11 @@ namespace AdmissionCommittee.Manager
 
             try
             {
-                var student = await studentService.GetStudentByIdAsync(id);
+                var student = await studentService.GetStudentByIdAsync(id, cancellationToken);
 
                 if (student != null)
                 {
-                    await studentService.DeleteStudentAsync(id);
+                    await studentService.DeleteStudentAsync(id, cancellationToken);
                 }
 
                 return student;
@@ -99,7 +99,7 @@ namespace AdmissionCommittee.Manager
 
             try
             {
-                var result = await studentService.GetStudentByIdAsync(id);
+                var result = await studentService.GetStudentByIdAsync(id, cancellationToken);
 
                 return result;
             }
@@ -117,7 +117,7 @@ namespace AdmissionCommittee.Manager
 
             try
             {
-                var result = await studentService.GetStatisticsAsync();
+                var result = await studentService.GetStatisticsAsync(cancellationToken);
 
                 return result;
             }
