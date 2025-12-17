@@ -11,7 +11,7 @@ namespace AdmissionCommittee.Manager.Contracts
         /// <summary>
         /// Получает список всех студентов асинхронно
         /// </summary>
-        Task<List<Student>> GetAllStudentsAsync();
+        Task<List<Student>> GetAllStudentsAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Получает студента по идентификатору асинхронно
@@ -36,6 +36,6 @@ namespace AdmissionCommittee.Manager.Contracts
         /// <summary>
         /// Получает статистику по студентам асинхронно
         /// </summary>
-        Task<StatisticsResult> GetStatisticsAsync();
+        Task<StatisticsResult> GetStatisticsAsync(CancellationToken cancellationToken);
     }
 }

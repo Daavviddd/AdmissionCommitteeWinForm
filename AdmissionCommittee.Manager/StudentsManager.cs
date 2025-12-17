@@ -23,7 +23,7 @@ namespace AdmissionCommittee.Manager
             logger = loggerFactory.CreateLogger<StudentsManager>();
         }
 
-        async Task<List<Student>> IStudentsManager.GetAllStudentsAsync()
+        async Task<List<Student>> IStudentsManager.GetAllStudentsAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
             try
@@ -104,7 +104,7 @@ namespace AdmissionCommittee.Manager
             }
         }
 
-        async Task<StatisticsResult> IStudentsManager.GetStatisticsAsync()
+        async Task<StatisticsResult> IStudentsManager.GetStatisticsAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
